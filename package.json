@@ -87,7 +87,7 @@
   "peerDependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^2.4.5",
+    "mocha": "^6.2.2",
     "proxyquire": "^1.7.2",
     "should": "^8.3.1",
     "sinon": "^1.10.3"

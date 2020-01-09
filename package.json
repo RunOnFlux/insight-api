@@ -73,7 +73,7 @@
   "bitcoreNode": "lib",
   "dependencies": {
     "async": "^2.6.1",
-    "bignumber.js": "^4.0.2",
+    "bignumber.js": "^9.0.0",
     "body-parser": "^1.13.3",
     "compression": "^1.6.1",
     "lodash": "^2.4.1",

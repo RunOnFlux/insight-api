@@ -188,5 +188,12 @@
         "searchStrings": [
             "t1cVYU7yj2doV33B1Acn586FXn2GFSuwi3f"
         ]
+    },
+    {
+    	"poolName": "Speedpool",
+    	"url": "https://equihash.speedpool.top/getting_started",
+    	"searchStrings": [
+      	    "t1WtKRxFEHDg4ZFXM8JnJD1fRmELc8gvtbD"
+    	]
     }
 ]

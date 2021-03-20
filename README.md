@@ -13,7 +13,7 @@
 * [Difficulty](#difficulty-statistic)
 * [Total Supply](#total-supply-statistic)
 
-A ZelCash blockchain REST and web socket API service for [bitcore Node](https://github.com/zelcash/bitcore-node-zelcash).
+A Flux blockchain REST and web socket API service for [bitcore Node](https://github.com/zelcash/bitcore-node-zelcash).
 
 This is a backend-only service. If you're looking for the web frontend application, take a look at https://github.com/zelcash/insight-ui.
 
@@ -23,7 +23,7 @@ The API endpoints will be available by default at: `http://localhost:3001/insigh
 
 - [bitcore Node](https://github.com/zelcash/bitcore-node-zelcash)
 
-**Note:** You can use an existing ZelCash data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `zelcash.conf`, as well as a few other additional fields.
+**Note:** You can use an existing Flux data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `zelcash.conf`, as well as a few other additional fields.
 
 ## Query Rate Limit
 
@@ -427,7 +427,7 @@ POST response:
   /insight-api/peer
 ```
 
-### Status of the Zelcash Network
+### Status of the Flux Network
 ```
   /insight-api/status?q=xxx
 ```
@@ -526,9 +526,9 @@ Sample output:
   price: "0.0294763"
 }
 ```
-### `zelcash` room: 
+### `flux` room: 
 
-`zelcash/tx`: Returns a transformed tx as a json element detailing the transaction
+`flux/tx`: Returns a transformed tx as a json element detailing the transaction
 Sample output:
 ```
 {
@@ -548,7 +548,7 @@ isRBF: true
 }
 ```
 
-`zelcash/block`: Returns a transformed block as a json element detailing the block
+`flux/block`: Returns a transformed block as a json element detailing the block
 Sample output:
 ```
 {

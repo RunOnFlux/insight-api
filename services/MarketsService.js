@@ -31,30 +31,26 @@ util.inherits(MarketsService, EventEmitter);
 MarketsService.prototype._updateInfo = function () {
     var self = this;
     return request.get({
-        url: 'https://coinlib.io/api/v1/coin?key=ef17eaaef4e1f6f2&pref=USD&symbol=ZEL',
+        url: 'https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD',
         json: true
     }, function (err, response, body) {
 
         if (err) {
-            return self.common.log.error('Coinlib error', err);
+            return self.common.log.error('Coingecko error', err);
         }
 
         if (response.statusCode != 200) {
-            return self.common.log.error('Coinlib error status code', response.statusCode);
+            return self.common.log.error('Coingecko error status code', response.statusCode);
         }
 
         if (body) {
             var needToTrigger = false;
 
-            self.info.price = body.price || 0;
-            if (body.markets) {
-                if (body.markets[0]) {
-                    self.info.price_btc = body.markets[0].price || 0;
-                }
-            }
-            self.info.market_cap_usd = body.market_cap || 0;
-            self.info.total_volume_24h = body.total_volume_24h || 0;
-            self.info.delta_24h = body.delta_24h || 0;
+            self.info.price = body.quotes.USD.price || 0;
+            self.info.price_btc = body.quotes.BTC.price || 0;
+            self.info.market_cap_usd = body.quotes.USD.market_cap || 0;
+            self.info.total_volume_24h = body.quotes.USD.volume_24h || 0;
+            self.info.delta_24h = body.quotes.USD.percent_change_24h || 0;
             needToTrigger = true;
 
             if (needToTrigger) {
@@ -64,7 +60,7 @@ MarketsService.prototype._updateInfo = function () {
             return self.info;
         }
 
-        return self.common.log.error('Coinlib error body', body);
+        return self.common.log.error('Coingecko error body', body);
 
     });
 

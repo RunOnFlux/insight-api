@@ -6,7 +6,7 @@ module.exports = {
      * @param {Number} height
      * @return {BigNumber}
      */
-    getTotalSupplyByHeight: function (height) {
+    getCirculatingSupplyByHeight: function (height) {
         let subsidy = 150;
         var halvings = Math.floor((height - 2500) / 655350);
         var coins = ((657850 - 5000) * 150) + 375000 + 13020000;
@@ -23,6 +23,15 @@ module.exports = {
         }
     
         var supply = new BigNumber(coins);
+        return supply;
+    },
+
+    getTotalSupplyByHeight: function (height) {
+        var supply = new BigNumber(440000000);
+        if (height < 825000) {
+            supply = new BigNumber(210000000);
+        }
+
         return supply;
     }
 

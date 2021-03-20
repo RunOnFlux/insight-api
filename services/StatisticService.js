@@ -605,7 +605,7 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
         }
 
 
-        dayBN.supply.sum = SupplyHelper.getTotalSupplyByHeight(block.height).mul(1e8);
+        dayBN.supply.sum = SupplyHelper.getCirculatingSupplyByHeight(block.height).mul(1e8);
 
 
         return self.statisticDayRepository.createOrUpdateDay(new Date(date), dayBN, function (err) {
@@ -1289,7 +1289,7 @@ StatisticService.prototype.getPoolInfo = function (paddress) {
  *
  * @return {BigNumber} supply - BigNumber representation of total supply
  */
-StatisticService.prototype.getTotalSupply = function () {
+StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
@@ -1309,6 +1309,16 @@ StatisticService.prototype.getTotalSupply = function () {
     }
 
     var supply = new BigNumber(coins);
+
+    return supply;
+};
+StatisticService.prototype.getTotalSupply = function () {
+    const height = this.node.services.bitcoind.height
+
+    var supply = new BigNumber(440000000);
+    if (height < 825000) {
+        supply = new BigNumber(210000000);
+    }
 
     return supply;
 };

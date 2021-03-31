@@ -1312,6 +1312,33 @@ StatisticService.prototype.getCirculatingSupply = function () {
 
     return supply;
 };
+StatisticService.prototype.getCirculatingSupplyAllChains = function () {
+    let subsidy = 150;
+    const height = this.node.services.bitcoind.height
+    var halvings = Math.floor((height - 2500) / 655350);
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 12313785.94991485; // slowstart, premine, additional pools, first kadena swap pool, kda-flux snapshot
+    console.log(halvings);
+    for (let i = 1; i <= halvings; i++) {
+      subsidy = subsidy / 2;
+      console.log(subsidy);
+      if (i >= 64) {
+        coins += 0
+      } else if (i === halvings) {
+        // good for last one
+        coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+        // kda chain mining
+        if (height > 825000) {
+          coins += ((height - 825000) * subsidy / 10);
+        }
+      } else {
+        coins += 655350 * subsidy
+      }
+    }
+
+    var supply = new BigNumber(coins);
+
+    return supply;
+};
 StatisticService.prototype.getTotalSupply = function () {
     const height = this.node.services.bitcoind.height
 
@@ -1321,6 +1348,37 @@ StatisticService.prototype.getTotalSupply = function () {
     }
 
     return supply;
+};
+StatisticService.prototype.getTotalSupplyAllChains = function () {
+    const height = this.node.services.bitcoind.height
+
+    let subsidy = 150;
+    var halvings = Math.floor((height - 2500) / 655350);
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000; // slowstart, premine, additional pools, first kadena swap pool
+    console.log(halvings);
+    for (let i = 1; i <= halvings; i++) {
+      subsidy = subsidy / 2;
+      console.log(subsidy);
+      if (i >= 64) {
+        coins += 0
+      } else if (i === halvings) {
+        // good for last one
+        coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+      } else {
+        coins += 655350 * subsidy
+      }
+    }
+
+    var supply = new BigNumber(coins);
+    var supplyKDA = new BigNumber(440000000);
+    if (height < 825000) {
+        zelSupply = new BigNumber(210000000);
+        return zelSupply
+    }
+
+    const totalSupply = supply.plus(supplyKDA)
+
+    return totalSupply;
 };
 StatisticService.prototype.mode = function (array) {
     if (!array.length) return [];

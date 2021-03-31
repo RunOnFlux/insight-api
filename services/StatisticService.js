@@ -1335,7 +1335,7 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
       }
     }
 
-    var supply = new BigNumber(coins);
+    var supply = new BigNumber(coins.toString());
 
     return supply;
 };

@@ -197,5 +197,20 @@
     	"searchStrings": [
       	    "t1WtKRxFEHDg4ZFXM8JnJD1fRmELc8gvtbD"
     	]
+    },
+    {
+    	"poolName": "signal2noi",
+    	"url": "https://zel.signal2noi.se/",
+    	"searchStrings": [
+      	    "t1LQdqqvYJCdhrzcutw3qbVK5YzCM3uozU4"
+    	]
+    },
+    {
+    	"poolName": "prohashing",
+    	"url": "https://prohashing.com/",
+    	"searchStrings": [
+      	    "t1c59pASVSYH7UcMdpEw5pn6v9kcD7tsWu2",
+            "t1Q3Ufk7r2Rhm2Jgi7eSRvn7TMJKFHz8Tab"
+    	]
     }
 ]

@@ -184,6 +184,13 @@
         ]
     },
     {
+        "poolName": "Flux Labs Solo",
+        "url": "https://zellabs.net/coins/flux",
+        "searchStrings": [
+            "t1RDHkTgTnVordf5fbyuuUWHH8khPSxK8Xf"
+        ]
+    },
+    {
         "poolName": "ZPOOL",
         "url": "https://zpool.ca",
         "searchStrings": [

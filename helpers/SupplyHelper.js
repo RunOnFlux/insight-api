@@ -21,13 +21,13 @@ module.exports = {
             coins += 655350 * subsidy
           }
         }
-        if (hegight >= 836274) {
+        if (height >= 836274) {
           coins += 7500000;
         }
-        if (hegight >= 836994) {
+        if (height >= 836994) {
           coins += 2500000;
         }
-        if (hegight >= 837714) {
+        if (height >= 837714) {
           coins += 22000000;
         }
     

@@ -1207,30 +1207,30 @@ StatisticService.prototype.getBlockReward = function (height, callback) {
     // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
     var halvings;
     if (height <= 5000) {
-      halvings = 0
+        halvings = 0
     } else {
-      halvings = Math.floor((height - (2500)) / 655350);
+        halvings = Math.floor((height - (2500)) / 655350);
     }
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64) {
         return 0;
     }
-    
+
     // Mining slow start
     // The subsidy is ramped up linearly, skipping the middle payout of
     // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
     if (height == 0) {
-      var subsidy = new BN(0)
+        var subsidy = new BN(0)
     } else if (height == 1) {
-      var subsidy = new BN(0)
+        var subsidy = new BN(0)
     } else if (height == 2) {
-      var subsidy = new BN(13020000 * 1e8)
+        var subsidy = new BN(13020000 * 1e8)
     } else if (height < 2500) {
-      var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
+        var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
     } else if (height < 5000) {
-      var subsidy = new BN(150 * 1e8 * height / 5000)
+        var subsidy = new BN(150 * 1e8 * height / 5000)
     } else {
-      var subsidy = new BN(150 * 1e8)
+        var subsidy = new BN(150 * 1e8)
     }
 
     subsidy = subsidy.shrn(halvings);
@@ -1243,9 +1243,9 @@ StatisticService.prototype.getBlockRewardr = function (height) {
     // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
     var halvings;
     if (height <= 5000) {
-      halvings = 0
+        halvings = 0
     } else {
-      halvings = Math.floor((height - (2500)) / 655350);
+        halvings = Math.floor((height - (2500)) / 655350);
     }
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64) {
@@ -1256,17 +1256,17 @@ StatisticService.prototype.getBlockRewardr = function (height) {
     // The subsidy is ramped up linearly, skipping the middle payout of
     // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
     if (height == 0) {
-      var subsidy = new BN(0)
+        var subsidy = new BN(0)
     } else if (height == 1) {
-      var subsidy = new BN(0)
+        var subsidy = new BN(0)
     } else if (height == 2) {
-      var subsidy = new BN(13020000 * 1e8)
+        var subsidy = new BN(13020000 * 1e8)
     } else if (height < 2500) {
-      var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
+        var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
     } else if (height < 5000) {
-      var subsidy = new BN(150 * 1e8 * height / 5000)
+        var subsidy = new BN(150 * 1e8 * height / 5000)
     } else {
-      var subsidy = new BN(150 * 1e8)
+        var subsidy = new BN(150 * 1e8)
     }
     subsidy = subsidy.shrn(halvings);
 
@@ -1293,19 +1293,19 @@ StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000;
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000;
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
-      subsidy = subsidy / 2;
-      console.log(subsidy);
-      if (i >= 64) {
-        coins += 0
-      } else if (i === halvings) {
-        // good for last one
-        coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
-      } else {
-        coins += 655350 * subsidy
-      }
+        subsidy = subsidy / 2;
+        console.log(subsidy);
+        if (i >= 64) {
+            coins += 0
+        } else if (i === halvings) {
+            // good for last one
+            coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+        } else {
+            coins += 655350 * subsidy
+        }
     }
 
     var supply = new BigNumber(coins);
@@ -1316,23 +1316,23 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 12313785.94991485; // slowstart, premine, additional pools, first kadena swap pool, kda-flux snapshot
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 1000000 + 12313785.94991485; // slowstart, premine, dev fund + exchange fund, dev + exchange fund on kda, snapshot for kda
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
-      subsidy = subsidy / 2;
-      console.log(subsidy);
-      if (i >= 64) {
-        coins += 0
-      } else if (i === halvings) {
-        // good for last one
-        coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
-        // kda chain mining
-        if (height > 825000) {
-          coins += ((height - 825000) * subsidy / 10);
+        subsidy = subsidy / 2;
+        console.log(subsidy);
+        if (i >= 64) {
+            coins += 0
+        } else if (i === halvings) {
+            // good for last one
+            coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+            // kda chain mining
+            if (height > 825000) {
+                coins += ((height - 825000) * subsidy / 10);
+            }
+        } else {
+            coins += 655350 * subsidy
         }
-      } else {
-        coins += 655350 * subsidy
-      }
     }
 
     var supply = new BigNumber(coins.toString());
@@ -1357,16 +1357,16 @@ StatisticService.prototype.getTotalSupplyAllChains = function () {
     var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000; // slowstart, premine, additional pools, first kadena swap pool
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
-      subsidy = subsidy / 2;
-      console.log(subsidy);
-      if (i >= 64) {
-        coins += 0
-      } else if (i === halvings) {
-        // good for last one
-        coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
-      } else {
-        coins += 655350 * subsidy
-      }
+        subsidy = subsidy / 2;
+        console.log(subsidy);
+        if (i >= 64) {
+            coins += 0
+        } else if (i === halvings) {
+            // good for last one
+            coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+        } else {
+            coins += 655350 * subsidy
+        }
     }
 
     var supply = new BigNumber(coins);

@@ -1,7 +1,7 @@
 'use strict';
 
 var async = require('async');
-var bitcore = require('bitcore-lib-zelcash');
+var bitcore = require('bitcore-lib');
 var BigNumber = require('bignumber.js');
 var LRU = require('lru-cache');
 var Common = require('../lib/common');
@@ -1372,8 +1372,8 @@ StatisticService.prototype.getTotalSupplyAllChains = function () {
     var supply = new BigNumber(coins);
     var supplyKDA = new BigNumber(440000000);
     if (height < 825000) {
-        zelSupply = new BigNumber(210000000);
-        return zelSupply
+        fluxSupply = new BigNumber(210000000);
+        return fluxSupply
     }
 
     const totalSupply = supply.plus(supplyKDA)

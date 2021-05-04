@@ -13,17 +13,17 @@
 * [Difficulty](#difficulty-statistic)
 * [Total Supply](#total-supply-statistic)
 
-A Flux blockchain REST and web socket API service for [bitcore Node](https://github.com/zelcash/bitcore-node-zelcash).
+A Flux blockchain REST and web socket API service for [bitcore Node](https://github.com/runonflux/bitcore-node).
 
-This is a backend-only service. If you're looking for the web frontend application, take a look at https://github.com/zelcash/insight-ui.
+This is a backend-only service. If you're looking for the web frontend application, take a look at https://github.com/runonflux/insight-ui.
 
 The API endpoints will be available by default at: `http://localhost:3001/insight-api/`
 
 ## Prerequisites
 
-- [bitcore Node](https://github.com/zelcash/bitcore-node-zelcash)
+- [bitcore Node](https://github.com/runonflux/bitcore-node)
 
-**Note:** You can use an existing Flux data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `zelcash.conf`, as well as a few other additional fields.
+**Note:** You can use an existing Flux data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `flux.conf`, as well as a few other additional fields.
 
 ## Query Rate Limit
 
@@ -37,7 +37,7 @@ To protect the server, insight-api has a built it query rate limiter. It can be 
     }
   }
 ```
-With all the configuration options available: https://github.com/zelcash/insight-api/blob/master/lib/ratelimiter.js#L10-17
+With all the configuration options available: https://github.com/runonflux/insight-api/blob/master/lib/ratelimiter.js#L10-17
 
 Or disabled entirely with:
 ``` json
@@ -440,7 +440,7 @@ Where "xxx" can be:
  * getLastBlockHash
  * getMiningInfo
  * getPeerInfo
- * getZelNodes
+ * getFluxNodes
 
 
 ### Utility Methods

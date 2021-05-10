@@ -162,15 +162,15 @@
         ]
     },
     {
-        "poolName": "Equihub",
-        "url": "https://zel.equihub.pro/",
+        "poolName": "MinerPool",
+        "url": "https://flux.minerpool.org/",
         "searchStrings": [
             "t1UGZZrHxA4k2oCK4hSdFTprwtieyZbLih9"
         ]
     },
     {
-        "poolName": "Equihub SOLO",
-        "url": "https://solo-zel.equihub.pro/",
+        "poolName": "MinerPool SOLO",
+        "url": "https://solo-flux.minerpool.org/",
         "searchStrings": [
             "t1UKS3Pgwhovon1kPWCgpFbacsGJjb4keXM"
         ]

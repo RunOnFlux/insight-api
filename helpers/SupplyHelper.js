@@ -30,6 +30,33 @@ module.exports = {
         if (height >= 837714) {
           coins += 22000000;
         }
+        if (height >= 859314) {
+          coins += 22000000;
+        }
+        if (height >= 880914) {
+          coins += 22000000;
+        }
+        if (height >= 902514) {
+          coins += 22000000;
+        }
+        if (height >= 924114) {
+          coins += 22000000;
+        }
+        if (height >= 945714) {
+          coins += 22000000;
+        }
+        if (height >= 967314) {
+          coins += 22000000;
+        }
+        if (height >= 988914) {
+          coins += 22000000;
+        }
+        if (height >= 1010514) {
+          coins += 22000000;
+        }
+        if (height >= 1032114) {
+          coins += 22000000;
+        }
     
         var supply = new BigNumber(coins);
         return supply;

@@ -1293,7 +1293,7 @@ StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000;
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000;
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
@@ -1383,6 +1383,9 @@ StatisticService.prototype.getTotalSupplyAllChains = function () {
         }
     }
 
+    if (height >= 837714) {
+        coins += 22000000;
+    }
     if (height >= 859314) {
         coins += 22000000;
     }
@@ -1413,12 +1416,14 @@ StatisticService.prototype.getTotalSupplyAllChains = function () {
 
     var supply = new BigNumber(coins);
     var supplyKDA = new BigNumber(440000000);
+    var supplyBSC = new BigNumber(440000000);
+    var supplyETH = new BigNumber(440000000);
     if (height < 825000) {
         fluxSupply = new BigNumber(210000000);
         return fluxSupply
     }
 
-    const totalSupply = supply.plus(supplyKDA)
+    const totalSupply = supply.plus(supplyKDA).plus(supplyBSC).plus(supplyETH)
 
     return totalSupply;
 };

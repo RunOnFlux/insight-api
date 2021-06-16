@@ -1319,10 +1319,10 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 // slowstart, premine, dev fund + exchange fund
     coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for kda
     console.log(halvings);
-    if (height > 893000) { // bsc goes live
+    if (height > 883000) { // bsc goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for bsc
     }
-    if (height > 900000) { // eth goes live
+    if (height > 883000) { // eth goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for eth
     }
     for (let i = 1; i <= halvings; i++) {

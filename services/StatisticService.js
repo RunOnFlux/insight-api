@@ -1325,6 +1325,12 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     if (height > 883000) { // eth goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for eth
     }
+    if (height > 969500) { // sol goes live
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for sol
+    }
+    if (height > 969500) { // trx goes live
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for trx
+    }
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
         console.log(subsidy);
@@ -1341,6 +1347,14 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                     coins += ((height - 825000) * subsidy / 10);
                 }
                 if (height > 825000) { // bsc mining
+                    coins += ((height - 825000) * subsidy / 10);
+                }
+            }
+            if (height > 969500) { // snapshot height for main chain for sol, trx
+                if (height > 825000) { // sol mining
+                    coins += ((height - 825000) * subsidy / 10);
+                }
+                if (height > 825000) { // trx mining
                     coins += ((height - 825000) * subsidy / 10);
                 }
             }

@@ -219,5 +219,12 @@
       	    "t1c59pASVSYH7UcMdpEw5pn6v9kcD7tsWu2",
             "t1Q3Ufk7r2Rhm2Jgi7eSRvn7TMJKFHz8Tab"
     	]
+    },
+    {
+    	"poolName": "EnigmaPool",
+    	"url": "https://enigmapool.com",
+    	"searchStrings": [
+      	    "t1P8Woa26PQvePZSurvH51yrqgLayywghJe"
+    	]
     }
 ]

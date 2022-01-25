@@ -163,14 +163,14 @@
     },
     {
         "poolName": "MinerPool",
-        "url": "https://flux.minerpool.org/",
+        "url": "https://flux.minerpool.org",
         "searchStrings": [
             "t1ZSUsQv2dHmAdsHPTcfd3UAigyreaYTxjq"
         ]
     },
     {
         "poolName": "MinerPool SOLO",
-        "url": "https://solo-flux.minerpool.org/",
+        "url": "https://solo-flux.minerpool.org",
         "searchStrings": [
             "t1Um6mMrMWAa72gh15e1cZ299pK7azCx5YF"
         ]
@@ -185,7 +185,7 @@
     },
     {
         "poolName": "Flux Labs Solo",
-        "url": "https://fluxpools.net/coins/flux-solo/",
+        "url": "https://fluxpools.net/coins/flux-solo",
         "searchStrings": [
             "t1RDHkTgTnVordf5fbyuuUWHH8khPSxK8Xf"
         ]
@@ -207,14 +207,14 @@
     },
     {
     	"poolName": "Signal2noi",
-    	"url": "https://zel.signal2noi.se/",
+    	"url": "https://zel.signal2noi.se",
     	"searchStrings": [
       	    "t1LQdqqvYJCdhrzcutw3qbVK5YzCM3uozU4"
     	]
     },
     {
     	"poolName": "Prohashing",
-    	"url": "https://prohashing.com/",
+    	"url": "https://prohashing.com",
     	"searchStrings": [
       	    "t1c59pASVSYH7UcMdpEw5pn6v9kcD7tsWu2",
             "t1Q3Ufk7r2Rhm2Jgi7eSRvn7TMJKFHz8Tab"
@@ -225,6 +225,13 @@
     	"url": "https://enigmapool.com",
     	"searchStrings": [
       	    "t1P8Woa26PQvePZSurvH51yrqgLayywghJe"
+    	]
+    },
+    {
+    	"poolName": "Hero Miners",
+    	"url": "https://flux.herominers.com",
+    	"searchStrings": [
+      	    "t1gomWuf4C5qpgHoTQjLUEP9PUdMcCcJXjb"
     	]
     }
 ]

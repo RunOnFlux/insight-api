@@ -1293,7 +1293,7 @@ StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000;
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
@@ -1331,6 +1331,12 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     if (height > 969500) { // trx goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for trx
     }
+    if (height > 1170000) { // avax goes live
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for sol
+    }
+    if (height > 1170000) { // atom goes live
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for trx
+    }
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
         console.log(subsidy);
@@ -1351,6 +1357,14 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                 }
             }
             if (height > 969500) { // snapshot height for main chain for sol, trx
+                if (height > 825000) { // sol mining
+                    coins += ((height - 825000) * subsidy / 10);
+                }
+                if (height > 825000) { // trx mining
+                    coins += ((height - 825000) * subsidy / 10);
+                }
+            }
+            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax, atom
                 if (height > 825000) { // sol mining
                     coins += ((height - 825000) * subsidy / 10);
                 }
@@ -1380,66 +1394,12 @@ StatisticService.prototype.getTotalSupply = function () {
 StatisticService.prototype.getTotalSupplyAllChains = function () {
     const height = this.node.services.bitcoind.height
 
-    let subsidy = 150;
-    var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000; // slowstart, premine, additional pools
-    console.log(halvings);
-    for (let i = 1; i <= halvings; i++) {
-        subsidy = subsidy / 2;
-        console.log(subsidy);
-        if (i >= 64) {
-            coins += 0
-        } else if (i === halvings) {
-            // good for last one
-            coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
-        } else {
-            coins += 655350 * subsidy
-        }
-    }
-
-    if (height >= 837714) {
-        coins += 22000000;
-    }
-    if (height >= 859314) {
-        coins += 22000000;
-    }
-    if (height >= 880914) {
-        coins += 22000000;
-    }
-    if (height >= 902514) {
-        coins += 22000000;
-    }
-    if (height >= 924114) {
-        coins += 22000000;
-    }
-    if (height >= 945714) {
-        coins += 22000000;
-    }
-    if (height >= 967314) {
-        coins += 22000000;
-    }
-    if (height >= 988914) {
-        coins += 22000000;
-    }
-    if (height >= 1010514) {
-        coins += 22000000;
-    }
-    if (height >= 1032114) {
-        coins += 22000000;
-    }
-
-    var supply = new BigNumber(coins);
-    var supplyKDA = new BigNumber(440000000);
-    var supplyBSC = new BigNumber(440000000);
-    var supplyETH = new BigNumber(440000000);
+    var supply = new BigNumber(440000000);
     if (height < 825000) {
-        fluxSupply = new BigNumber(210000000);
-        return fluxSupply
+        supply = new BigNumber(210000000);
     }
 
-    const totalSupply = supply.plus(supplyKDA).plus(supplyBSC).plus(supplyETH)
-
-    return totalSupply;
+    return supply;
 };
 StatisticService.prototype.mode = function (array) {
     if (!array.length) return [];

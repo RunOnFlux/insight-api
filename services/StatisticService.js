@@ -1293,7 +1293,7 @@ StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
@@ -1332,10 +1332,10 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for trx
     }
     if (height > 1170000) { // avax goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for sol
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for avax
     }
-    if (height > 1170000) { // atom goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for trx
+    if (height > 2170000) { // todo goes live
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for TODO
     }
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
@@ -1364,11 +1364,13 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                     coins += ((height - 825000) * subsidy / 10);
                 }
             }
-            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax, atom
-                if (height > 825000) { // sol mining
+            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax
+                if (height > 825000) { // avax mining
                     coins += ((height - 825000) * subsidy / 10);
                 }
-                if (height > 825000) { // trx mining
+            }
+            if (height > 2170000) { // release height. Snapshot height for is 1114211 for TODO
+                if (height > 825000) { // todo mining
                     coins += ((height - 825000) * subsidy / 10);
                 }
             }

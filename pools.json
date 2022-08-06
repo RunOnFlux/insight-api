@@ -233,5 +233,12 @@
     	"searchStrings": [
       	    "t1gomWuf4C5qpgHoTQjLUEP9PUdMcCcJXjb"
     	]
+    },
+    {
+    	"poolName": "Cruxpool",
+    	"url": "https://cruxpool.com/flux",
+    	"searchStrings": [
+      	    "t1VqjjSNp6yBKDQ55DjsP1KvRDqeELa8WSH"
+    	]
     }
 ]

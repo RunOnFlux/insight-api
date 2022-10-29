@@ -163,14 +163,14 @@
     },
     {
         "poolName": "MinerPool",
-        "url": "https://flux.minerpool.org",
+        "url": "https://flux.minerpool.pro",
         "searchStrings": [
             "t1ZSUsQv2dHmAdsHPTcfd3UAigyreaYTxjq"
         ]
     },
     {
         "poolName": "MinerPool SOLO",
-        "url": "https://solo-flux.minerpool.org",
+        "url": "https://solo-flux.minerpool.pro",
         "searchStrings": [
             "t1Um6mMrMWAa72gh15e1cZ299pK7azCx5YF"
         ]

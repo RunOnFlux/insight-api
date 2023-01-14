@@ -36,11 +36,11 @@ MarketsService.prototype._updateInfo = function () {
     }, function (err, response, body) {
 
         if (err) {
-            return self.common.log.error('Coingecko error', err);
+            return self.common.log.error('Coinpaprika error', err);
         }
 
         if (response.statusCode != 200) {
-            return self.common.log.error('Coingecko error status code', response.statusCode);
+            return self.common.log.error('Coinpaprika error status code', response.statusCode);
         }
 
         if (body) {
@@ -60,7 +60,7 @@ MarketsService.prototype._updateInfo = function () {
             return self.info;
         }
 
-        return self.common.log.error('Coingecko error body', body);
+        return self.common.log.error('Coinpaprika error body', body);
 
     });
 

@@ -240,5 +240,12 @@
     	"searchStrings": [
       	    "t1VqjjSNp6yBKDQ55DjsP1KvRDqeELa8WSH"
     	]
+    },
+    {
+    	"poolName": "Crypto 2 Mars PPLNT",
+    	"url": "https://flux.2mars.biz/",
+    	"searchStrings": [
+      	    "t1LE9WcooD1mTRjHH9Ta7VQei89trJHAECy"
+    	]    
     }
 ]

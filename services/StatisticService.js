@@ -1334,12 +1334,15 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     if (height > 1170000) { // avax goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for avax
     }
-    if (height > 1210000) { // todo goes live
+    if (height > 1210000) { // erg goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for erg
     }
-    if (height > 1330000) { // todo goes live
+    if (height > 1330000) { // algo goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for algo
     }
+    if (height > 1414000) { // matic goes live
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for matic
+      }
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
         console.log(subsidy);
@@ -1373,15 +1376,20 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                 }
             }
             if (height > 1210000) { // release height. Snapshot height for is 1114211 for erg
-                if (height > 825000) { // todo mining
+                if (height > 825000) { // erg mining
                     coins += ((height - 825000) * subsidy / 10);
                 }
             }
             if (height > 1330000) { // release height for algo
-                if (height > 825000) { // todo mining
+                if (height > 825000) { // algo mining
                     coins += ((height - 825000) * subsidy / 10);
                 }
             }
+            if (height > 1414000) { // release height for matic
+                if (height > 825000) { // matic mining
+                  coins += ((height - 825000) * subsidy / 10);
+                }
+              }
         } else {
             coins += 655350 * subsidy
         }

@@ -1293,7 +1293,7 @@ StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
@@ -1316,9 +1316,8 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 // slowstart, premine, dev fund + exchange fund
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000; // slowstart, premine, dev fund + exchange fund
     coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for kda
-    console.log(halvings);
     if (height > 883000) { // bsc goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for bsc
     }
@@ -1334,7 +1333,7 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     if (height > 1170000) { // avax goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for avax
     }
-    if (height > 1210000) { // erg goes live
+    if (height > 1210000) { // ergo goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for erg
     }
     if (height > 1330000) { // algo goes live
@@ -1342,56 +1341,102 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     }
     if (height > 1414000) { // matic goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for matic
-      }
+    }
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
-        console.log(subsidy);
         if (i >= 64) {
             coins += 0
-        } else if (i === halvings) {
+        } else if (i === halvings) { // from second halving onwards
             // good for last one
+            const nBlocksMain = height - 657850 - ((i - 1) * 655350);
+            const nBlocksAsset = nBlocksMain;
             coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
             if (height > 825000) { // kda chain mining
-                coins += ((height - 825000) * subsidy / 10);
+                coins += (nBlocksAsset * subsidy / 10);
             }
             if (height > 883000) { // snapshot height for main chain for eth, bsc
                 if (height > 825000) { // eth mining
-                    coins += ((height - 825000) * subsidy / 10);
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
                 if (height > 825000) { // bsc mining
-                    coins += ((height - 825000) * subsidy / 10);
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
             }
             if (height > 969500) { // snapshot height for main chain for sol, trx
                 if (height > 825000) { // sol mining
-                    coins += ((height - 825000) * subsidy / 10);
+                    console.log((nBlocksAsset * subsidy / 10));
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
                 if (height > 825000) { // trx mining
-                    coins += ((height - 825000) * subsidy / 10);
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
             }
-            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax
+            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax, + 22000000
                 if (height > 825000) { // avax mining
-                    coins += ((height - 825000) * subsidy / 10);
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
             }
-            if (height > 1210000) { // release height. Snapshot height for is 1114211 for erg
+            if (height > 1210000) { // release height. Snapshot height for is 1114211 for erg, + 22000000
                 if (height > 825000) { // erg mining
-                    coins += ((height - 825000) * subsidy / 10);
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
             }
             if (height > 1330000) { // release height for algo
                 if (height > 825000) { // algo mining
-                    coins += ((height - 825000) * subsidy / 10);
+                    console.log((nBlocksAsset * subsidy / 10));
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
             }
             if (height > 1414000) { // release height for matic
                 if (height > 825000) { // matic mining
-                  coins += ((height - 825000) * subsidy / 10);
+                    coins += (nBlocksAsset * subsidy / 10);
                 }
-              }
-        } else {
+            }
+        } else { // from first to second halving
             coins += 655350 * subsidy
+            const nBlocksAsset = 655350 - (825000 - 657850);
+
+            if (height > 825000) { // kda chain mining
+                coins += (nBlocksAsset * subsidy / 10);
+            }
+            if (height > 883000) { // snapshot height for main chain for eth, bsc
+                if (height > 825000) { // eth mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+                if (height > 825000) { // bsc mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
+            if (height > 969500) { // snapshot height for main chain for sol, trx
+                if (height > 825000) { // sol mining
+                    console.log((nBlocksAsset * subsidy / 10));
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+                if (height > 825000) { // trx mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
+            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax, + 22000000
+                if (height > 825000) { // avax mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
+            if (height > 1210000) { // release height. Snapshot height for is 1114211 for erg, + 22000000
+                if (height > 825000) { // erg mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
+            if (height > 1330000) { // release height for algo
+                if (height > 825000) { // algo mining
+                    console.log((nBlocksAsset * subsidy / 10));
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
+            if (height > 1414000) { // release height for matic
+                if (height > 825000) { // matic mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
         }
     }
 

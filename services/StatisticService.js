@@ -1342,6 +1342,9 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     if (height > 1414000) { // matic goes live
         coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for matic
     }
+    if (height > 1738000) { // base goes live
+        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for base
+    }
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
         if (i >= 64) {
@@ -1392,6 +1395,11 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                     coins += (nBlocksAsset * subsidy / 10);
                 }
             }
+            if (height > 1738000) { // release height for base
+                if (height > 825000) { // base mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
         } else { // from first to second halving
             coins += 655350 * subsidy
             const nBlocksAsset = 655350 - (825000 - 657850);
@@ -1437,6 +1445,12 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                     coins += (nBlocksAsset * subsidy / 10);
                 }
             }
+            if (height > 1738000) { // release height for base
+                if (height > 825000) { // base mining
+                    coins += (nBlocksAsset * subsidy / 10);
+                }
+            }
+        }
         }
     }
 

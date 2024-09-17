@@ -1451,7 +1451,6 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                 }
             }
         }
-        }
     }
 
     var supply = new BigNumber(coins.toString());

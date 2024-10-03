@@ -63,12 +63,12 @@ module.exports = {
     },
 
     getTotalSupplyByHeight: function (height) {
-        var supply = new BigNumber(440000000);
-        if (height < 825000) {
-            supply = new BigNumber(210000000);
-        }
+        // var supply = new BigNumber(440000000);
+        // if (height < 825000) {
+        //     supply = new BigNumber(210000000);
+        // }
 
-        return supply;
+        return getCirculatingSupplyByHeight(height);
     }
 
 };

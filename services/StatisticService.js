@@ -1293,7 +1293,7 @@ StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
+    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
@@ -1367,7 +1367,6 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
             }
             if (height > 969500) { // snapshot height for main chain for sol, trx
                 if (height > 825000) { // sol mining
-                    console.log((nBlocksAsset * subsidy / 10));
                     coins += (nBlocksAsset * subsidy / 10);
                 }
                 if (height > 825000) { // trx mining
@@ -1386,7 +1385,6 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
             }
             if (height > 1330000) { // release height for algo
                 if (height > 825000) { // algo mining
-                    console.log((nBlocksAsset * subsidy / 10));
                     coins += (nBlocksAsset * subsidy / 10);
                 }
             }
@@ -1417,7 +1415,6 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
             }
             if (height > 969500) { // snapshot height for main chain for sol, trx
                 if (height > 825000) { // sol mining
-                    console.log((nBlocksAsset * subsidy / 10));
                     coins += (nBlocksAsset * subsidy / 10);
                 }
                 if (height > 825000) { // trx mining
@@ -1436,7 +1433,6 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
             }
             if (height > 1330000) { // release height for algo
                 if (height > 825000) { // algo mining
-                    console.log((nBlocksAsset * subsidy / 10));
                     coins += (nBlocksAsset * subsidy / 10);
                 }
             }

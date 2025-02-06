@@ -71,6 +71,18 @@ const statisticDaySchema = new mongoose.Schema({
         type: Date,
         required: true,
         index: true
+    },
+    activeAddresses: {
+        addresses: {
+            type: Array,
+            required: true,
+            default : []
+        },
+        count: {
+            type: Number,
+            required: true,
+            default : 0
+        }
     }
 }, {
     timestamps: {

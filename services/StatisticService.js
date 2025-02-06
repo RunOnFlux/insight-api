@@ -563,7 +563,11 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
                         sum: '0',
                         count: '0'
                     },
-                    date: date
+                    date: date,
+                    activeAddresses: {
+                        addresses: [],
+                        count: 0
+                    }
                 };
 
             } else {
@@ -607,6 +611,24 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
 
         dayBN.supply.sum = SupplyHelper.getCirculatingSupplyByHeight(block.height).mul(1e8);
 
+        block.tx.forEach(function (tx) {
+            if (tx.version <= 4) {
+                tx.vin.forEach(function (vin) {
+                    if (vin.addr) {
+                        dayBN.activeAddresses.addresses.push(vin.addr);
+                    }
+                });
+                tx.vout.forEach(function (vout) {
+                    if (vout.scriptPubKey.addresses[0]) {
+                        dayBN.activeAddresses.addresses.push(vout.scriptPubKey.addresses[0]);
+                    }
+                });
+            }
+        });
+
+        // remove duplicates
+        dayBN.activeAddresses.addresses = [...new Set(dayBN.activeAddresses.addresses)];
+        dayBN.activeAddresses.count = dayBN.activeAddresses.addresses.length;
 
         return self.statisticDayRepository.createOrUpdateDay(new Date(date), dayBN, function (err) {
             return callback(err);
@@ -951,6 +973,39 @@ StatisticService.prototype.getTransactions = function (days, next) {
                 date: self.formatTimestamp(day.date),
                 transaction_count: parseInt(day.numberOfTransactions.count),
                 block_count: parseInt(day.totalBlocks.count)
+            });
+
+        });
+
+        return next(err, results);
+
+    });
+
+};
+
+/**
+ *
+ * @param {Number} days
+ * @param {Function} next
+ */
+StatisticService.prototype.getActiveAddresses = function (days, next) {
+
+    var self = this;
+
+    return self.getStats(days, function (err, stats) {
+
+        if (err) {
+            return next(err);
+        }
+
+        var results = [];
+
+        stats.forEach(function (day) {
+
+            results.push({
+                date: self.formatTimestamp(day.date),
+                activeAddresses: day.activeAddresses,
+                activeAddressesCount: day.activeAddresses.count
             });
 
         });

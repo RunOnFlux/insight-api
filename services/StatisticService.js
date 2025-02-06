@@ -616,9 +616,8 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
 
         dayBN.supply.sum = SupplyHelper.getCirculatingSupplyByHeight(block.height).mul(1e8);
 
-        console.log(block.transactions);
         data.block.transactions.forEach(function (txNotTransformed) {
-            var tx = self.txController.transformInvTransaction(txNotTransformed);
+            var tx = self.txController.transformTransaction(txNotTransformed);
             console.log(tx);
             // if (tx.version <= 4) {
             //     if (tx.vin) {

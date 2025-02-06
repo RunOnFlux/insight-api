@@ -449,6 +449,10 @@ AddressBalanceService.prototype.processBlock = function (blockHeight, next) {
 
     var self = this;
 
+    if (blockHeight % 1000 === 0) {
+        self.common.log.info('[AddressBalanceService] processing block ', blockHeight);
+    }
+
     return self.node.getBlockOverview(blockHeight, function (err, block) {
 
         if (err) {

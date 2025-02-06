@@ -199,6 +199,9 @@ AddressBlocksMinedService.prototype.processBlock = function (blockHeight, next) 
     var block;
     var transaction;
 
+    if (blockHeight % 1000 === 0) {
+        self.common.log.info('[AddressBlocksMinedService] processing block ', blockHeight);
+    }
 
     return async.waterfall([function (callback) {
         return self.node.services.bitcoind.getJsonBlock(blockHeight, function (err, response) {

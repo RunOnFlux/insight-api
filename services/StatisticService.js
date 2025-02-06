@@ -482,6 +482,10 @@ StatisticService.prototype.processBlock = function (blockHeight, next) {
 
         self.lastCheckedBlock = blockHeight;
 
+        if (blockHeight % 1000 === 0) {
+            self.common.log.info('[STATISTICS Service] processing block ', self.lastCheckedBlock);
+        }
+
         var block = data.blockJson,
             date = new Date(block.time * 1000),
             formattedDate = self.formatTimestamp(date);
@@ -613,16 +617,24 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
 
         block.tx.forEach(function (tx) {
             if (tx.version <= 4) {
-                tx.vin.forEach(function (vin) {
-                    if (vin.addr) {
-                        dayBN.activeAddresses.addresses.push(vin.addr);
-                    }
-                });
-                tx.vout.forEach(function (vout) {
-                    if (vout.scriptPubKey.addresses[0]) {
-                        dayBN.activeAddresses.addresses.push(vout.scriptPubKey.addresses[0]);
-                    }
-                });
+                if (tx.vin) {
+                    tx.vin.forEach(function (vin) {
+                        if (vin && vin.addr) {
+                            dayBN.activeAddresses.addresses.push(vin.addr);
+                        }
+                    });
+                }
+                if (tx.vout) {
+                    tx.vout.forEach(function (vout) {
+                        if (vout && vout.scriptPubKey && vout.scriptPubKey.addresses) {
+                            vout.scriptPubKey.addresses.forEach(function (address) {
+                                if (address) {
+                                    dayBN.activeAddresses.addresses.push(address);
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
 

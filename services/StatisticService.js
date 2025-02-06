@@ -617,28 +617,21 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
         dayBN.supply.sum = SupplyHelper.getCirculatingSupplyByHeight(block.height).mul(1e8);
 
         data.block.transactions.forEach(function (txNotTransformed) {
-            var tx = self.txController.transformTransaction(txNotTransformed);
-            console.log(tx);
-            // if (tx.version <= 4) {
-            //     if (tx.vin) {
-            //         tx.vin.forEach(function (vin) {
-            //             if (vin && vin.addr) {
-            //                 dayBN.activeAddresses.addresses.push(vin.addr);
-            //             }
-            //         });
-            //     }
-            //     if (tx.vout) {
-            //         tx.vout.forEach(function (vout) {
-            //             if (vout && vout.scriptPubKey && vout.scriptPubKey.addresses) {
-            //                 vout.scriptPubKey.addresses.forEach(function (address) {
-            //                     if (address) {
-            //                         dayBN.activeAddresses.addresses.push(address);
-            //                     }
-            //                 });
-            //             }
-            //         });
-            //     }
-            // }
+            var tx = self.txController.transformFluxChainTransaction(txNotTransformed);
+            if (tx.vin) {
+                tx.vin.forEach(function (vin) {
+                    if (vin && vin.address) {
+                        dayBN.activeAddresses.addresses.push(vin.address);
+                    }
+                });
+            }
+            if (tx.vout) {
+                tx.vout.forEach(function (vout) {
+                    if (vout && vout.address) {
+                        dayBN.activeAddresses.addresses.push(vout.address);
+                    }
+                })
+            }
         });
 
         // remove duplicates

@@ -1004,7 +1004,7 @@ StatisticService.prototype.getActiveAddresses = function (days, next) {
 
             results.push({
                 date: self.formatTimestamp(day.date),
-                activeAddresses: day.activeAddresses,
+                activeAddresses: day.activeAddresses.addresses,
                 activeAddressesCount: day.activeAddresses.count
             });
 

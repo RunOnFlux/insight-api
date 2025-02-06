@@ -1004,8 +1004,8 @@ StatisticService.prototype.getActiveAddresses = function (days, next) {
 
             results.push({
                 date: self.formatTimestamp(day.date),
-                activeAddresses: day.activeAddresses.addresses,
-                activeAddressesCount: day.activeAddresses.count
+                activeAddresses: day.activeAddresses ? day.activeAddresses.addresses : [],
+                activeAddressesCount: day.activeAddresses ? day.activeAddresses.count : 0
             });
 
         });

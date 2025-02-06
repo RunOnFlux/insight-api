@@ -24,6 +24,7 @@ function StatisticService(options) {
 
     this.addressBalanceService = options.addressBalanceService;
     this.lastBlockRepository = options.lastBlockRepository;
+    this.txController = options.txController;
 
     /**
      * 24h Cache
@@ -615,27 +616,30 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
 
         dayBN.supply.sum = SupplyHelper.getCirculatingSupplyByHeight(block.height).mul(1e8);
 
-        block.tx.forEach(function (tx) {
-            if (tx.version <= 4) {
-                if (tx.vin) {
-                    tx.vin.forEach(function (vin) {
-                        if (vin && vin.addr) {
-                            dayBN.activeAddresses.addresses.push(vin.addr);
-                        }
-                    });
-                }
-                if (tx.vout) {
-                    tx.vout.forEach(function (vout) {
-                        if (vout && vout.scriptPubKey && vout.scriptPubKey.addresses) {
-                            vout.scriptPubKey.addresses.forEach(function (address) {
-                                if (address) {
-                                    dayBN.activeAddresses.addresses.push(address);
-                                }
-                            });
-                        }
-                    });
-                }
-            }
+        console.log(block.transactions);
+        data.block.transactions.forEach(function (txNotTransformed) {
+            var tx = self.txController.transformInvTransaction(txNotTransformed);
+            console.log(tx);
+            // if (tx.version <= 4) {
+            //     if (tx.vin) {
+            //         tx.vin.forEach(function (vin) {
+            //             if (vin && vin.addr) {
+            //                 dayBN.activeAddresses.addresses.push(vin.addr);
+            //             }
+            //         });
+            //     }
+            //     if (tx.vout) {
+            //         tx.vout.forEach(function (vout) {
+            //             if (vout && vout.scriptPubKey && vout.scriptPubKey.addresses) {
+            //                 vout.scriptPubKey.addresses.forEach(function (address) {
+            //                     if (address) {
+            //                         dayBN.activeAddresses.addresses.push(address);
+            //                     }
+            //                 });
+            //             }
+            //         });
+            //     }
+            // }
         });
 
         // remove duplicates

@@ -674,7 +674,11 @@ StatisticService.prototype._toDayBN = function (day) {
             sum: new BigNumber(day.netHash.sum),
             count: new BigNumber(day.netHash.count)
         },
-        date: day.date
+        date: day.date,
+        activeAddresses: {
+            addresses: day.activeAddresses.addresses,
+            count: day.activeAddresses.count
+        }
     };
 };
 

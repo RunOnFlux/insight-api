@@ -9,6 +9,9 @@ module.exports = {
     getCirculatingSupplyByHeight: function (height) {
         let subsidy = 150;
         var halvings = Math.floor((height - 2500) / 655350);
+        if (halvings >= 2) {
+          halvings = 2
+        }
         var coins = ((657850 - 5000) * 150) + 375000 + 13020000;
         for (let i = 1; i <= halvings; i++) {
           subsidy = subsidy / 2;

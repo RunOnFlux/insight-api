@@ -1282,6 +1282,9 @@ StatisticService.prototype.getBlockReward = function (height, callback) {
     if (halvings >= 64) {
         return 0;
     }
+    if (halvings >= 2) {
+        halvings = 2
+    }
 
     // Mining slow start
     // The subsidy is ramped up linearly, skipping the middle payout of
@@ -1317,6 +1320,9 @@ StatisticService.prototype.getBlockRewardr = function (height) {
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64) {
         return 0;
+    }
+    if (halvings >= 2) {
+        halvings = 2
     }
 
     // Mining slow start
@@ -1360,6 +1366,9 @@ StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
+    if (halvings >= 2) {
+        halvings = 2
+    }
     var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
     console.log(halvings);
     for (let i = 1; i <= halvings; i++) {
@@ -1383,6 +1392,9 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
     var halvings = Math.floor((height - 2500) / 655350);
+    if (halvings >= 2) {
+        halvings = 2
+    }
     var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000; // slowstart, premine, dev fund + exchange fund
     coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for kda
     if (height > 883000) { // bsc goes live

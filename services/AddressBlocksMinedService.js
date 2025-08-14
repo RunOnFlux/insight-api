@@ -275,6 +275,9 @@ AddressBlocksMinedService.prototype.processBlock = function (blockHeight, next) 
 
 AddressBlocksMinedService.prototype.getBlockReward = function(height) {
   var halvings = Math.floor(height / 2100000);
+  if (halvings >= 2) {
+    halvings = 2
+  }
   // Force block reward to zero when right shift is undefined.
   if (halvings >= 64) {
     return 0;

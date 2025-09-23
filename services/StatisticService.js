@@ -353,10 +353,20 @@ StatisticService.prototype._getBlockInfo = function (blockHeight, next) {
                * Fee
          */
 
-
+        // Check if block has transactions and the first transaction exists
+        if (!dataFlow.block.transactions || !dataFlow.block.transactions[0]) {
+            dataFlow.fee = 0;
+            return callback();
+        }
 
         var transaction0 = dataFlow.block.transactions[0],
             currentVoutsAmount = 0;
+
+        // Check if transaction has outputs
+        if (!transaction0.outputs) {
+            dataFlow.fee = 0;
+            return callback();
+        }
 
         transaction0.outputs.forEach(function (output) {
             currentVoutsAmount += output.satoshis;

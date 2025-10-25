@@ -1283,75 +1283,83 @@ StatisticService.prototype.getPoolsLastHour = function (nextCb) {
 StatisticService.prototype.getBlockReward = function (height, callback) {
     // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
     var halvings;
-    if (height <= 5000) {
-        halvings = 0
+    if (height >= 2020000) {
+        var subsidy = new BN(14 * 1e8);
     } else {
-        halvings = Math.floor((height - (2500)) / 655350);
-    }
-    // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64) {
-        return 0;
-    }
-    if (halvings >= 2) {
-        halvings = 2
-    }
+        if (height <= 5000) {
+            halvings = 0
+        } else {
+            halvings = Math.floor((height - (2500)) / 655350);
+        }
+        // Force block reward to zero when right shift is undefined.
+        if (halvings >= 64) {
+            return 0;
+        }
+        if (halvings >= 2) {
+            halvings = 2
+        }
 
-    // Mining slow start
-    // The subsidy is ramped up linearly, skipping the middle payout of
-    // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
-    if (height == 0) {
-        var subsidy = new BN(0)
-    } else if (height == 1) {
-        var subsidy = new BN(0)
-    } else if (height == 2) {
-        var subsidy = new BN(13020000 * 1e8)
-    } else if (height < 2500) {
-        var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
-    } else if (height < 5000) {
-        var subsidy = new BN(150 * 1e8 * height / 5000)
-    } else {
-        var subsidy = new BN(150 * 1e8)
-    }
+        // Mining slow start
+        // The subsidy is ramped up linearly, skipping the middle payout of
+        // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
+        if (height == 0) {
+            var subsidy = new BN(0)
+        } else if (height == 1) {
+            var subsidy = new BN(0)
+        } else if (height == 2) {
+            var subsidy = new BN(13020000 * 1e8)
+        } else if (height < 2500) {
+            var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
+        } else if (height < 5000) {
+            var subsidy = new BN(150 * 1e8 * height / 5000)
+        } else {
+            var subsidy = new BN(150 * 1e8)
+        }
 
-    subsidy = subsidy.shrn(halvings);
+        subsidy = subsidy.shrn(halvings);
+    }
     var sub;
     sub = parseInt(subsidy.toString(10));
     callback(null, sub);
 };
 
 StatisticService.prototype.getBlockRewardr = function (height) {
-    // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
-    var halvings;
-    if (height <= 5000) {
-        halvings = 0
+    if (height >= 2020000) {
+        var subsidy = new BN(14 * 1e8);
     } else {
-        halvings = Math.floor((height - (2500)) / 655350);
-    }
-    // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64) {
-        return 0;
-    }
-    if (halvings >= 2) {
-        halvings = 2
-    }
+        // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
+        var halvings;
+        if (height <= 5000) {
+            halvings = 0
+        } else {
+            halvings = Math.floor((height - (2500)) / 655350);
+        }
+        // Force block reward to zero when right shift is undefined.
+        if (halvings >= 64) {
+            return 0;
+        }
+        if (halvings >= 2) {
+            halvings = 2
+        }
 
-    // Mining slow start
-    // The subsidy is ramped up linearly, skipping the middle payout of
-    // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
-    if (height == 0) {
-        var subsidy = new BN(0)
-    } else if (height == 1) {
-        var subsidy = new BN(0)
-    } else if (height == 2) {
-        var subsidy = new BN(13020000 * 1e8)
-    } else if (height < 2500) {
-        var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
-    } else if (height < 5000) {
-        var subsidy = new BN(150 * 1e8 * height / 5000)
-    } else {
-        var subsidy = new BN(150 * 1e8)
+        // Mining slow start
+        // The subsidy is ramped up linearly, skipping the middle payout of
+        // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
+        if (height == 0) {
+            var subsidy = new BN(0)
+        } else if (height == 1) {
+            var subsidy = new BN(0)
+        } else if (height == 2) {
+            var subsidy = new BN(13020000 * 1e8)
+        } else if (height < 2500) {
+            var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
+        } else if (height < 5000) {
+            var subsidy = new BN(150 * 1e8 * height / 5000)
+        } else {
+            var subsidy = new BN(150 * 1e8)
+        }
+        subsidy = subsidy.shrn(halvings);
     }
-    subsidy = subsidy.shrn(halvings);
 
     return parseInt(subsidy.toString(10));
 };
@@ -1375,6 +1383,7 @@ StatisticService.prototype.getPoolInfo = function (paddress) {
 StatisticService.prototype.getCirculatingSupply = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
+    let PONheight = 2020000;
     var halvings = Math.floor((height - 2500) / 655350);
     if (halvings >= 2) {
         halvings = 2
@@ -1388,10 +1397,15 @@ StatisticService.prototype.getCirculatingSupply = function () {
             coins += 0
         } else if (i === halvings) {
             // good for last one
-            coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+            coins += (Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
         } else {
             coins += 655350 * subsidy
         }
+    }
+
+    // Add PON (Proof of Node) rewards starting at height 2020000 with 14 flux per block
+    if (height >= PONheight) {
+        coins += (height - PONheight + 1) * 14;
     }
 
     var supply = new BigNumber(coins);
@@ -1401,6 +1415,7 @@ StatisticService.prototype.getCirculatingSupply = function () {
 StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     let subsidy = 150;
     const height = this.node.services.bitcoind.height
+    let PONheight = 2020000;
     var halvings = Math.floor((height - 2500) / 655350);
     if (halvings >= 2) {
         halvings = 2
@@ -1440,9 +1455,9 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
             coins += 0
         } else if (i === halvings) { // from second halving onwards
             // good for last one
-            const nBlocksMain = height - 657850 - ((i - 1) * 655350);
+            const nBlocksMain = Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350);
             const nBlocksAsset = nBlocksMain;
-            coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+            coins += (Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
             if (height > 825000) { // kda chain mining
                 coins += (nBlocksAsset * subsidy / 10);
             }
@@ -1536,6 +1551,11 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
                 }
             }
         }
+    }
+
+    // Add PON (Proof of Node) rewards starting at height 2020000 with 14 flux per block
+    if (height >= PONheight) {
+        coins += (height - PONheight + 1) * 14;
     }
 
     var supply = new BigNumber(coins.toString());

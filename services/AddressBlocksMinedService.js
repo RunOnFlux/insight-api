@@ -274,19 +274,43 @@ AddressBlocksMinedService.prototype.processBlock = function (blockHeight, next) 
 };
 
 AddressBlocksMinedService.prototype.getBlockReward = function(height) {
-  var halvings = Math.floor(height / 2100000);
-  if (halvings >= 2) {
-    halvings = 2
-  }
-  // Force block reward to zero when right shift is undefined.
-  if (halvings >= 64) {
-    return 0;
-  }
+  if (height >= 2020000) {
+    // PON (Proof of Node) reward starting at height 2020000
+    return 14 * 1e8;
+  } else {
+    // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
+    var halvings;
+    if (height <= 5000) {
+      halvings = 0
+    } else {
+      halvings = Math.floor((height - (2500)) / 655350);
+    }
+    // Force block reward to zero when right shift is undefined.
+    if (halvings >= 64) {
+      return 0;
+    }
+    if (halvings >= 2) {
+      halvings = 2
+    }
 
-  // Subsidy is cut in half every 2,100,000 blocks which will occur approximately every 4 years.
-  var subsidy = new BN(5000 * 1e8);
-  subsidy = subsidy.shrn(halvings);
-
+    // Mining slow start
+    // The subsidy is ramped up linearly, skipping the middle payout of
+    // MAX_SUBSIDY/2 to keep the monetary curve consistent with no slow start.
+    if (height == 0) {
+      var subsidy = new BN(0)
+    } else if (height == 1) {
+      var subsidy = new BN(0)
+    } else if (height == 2) {
+      var subsidy = new BN(13020000 * 1e8)
+    } else if (height < 2500) {
+      var subsidy = new BN(150 * 1e8 * (height - 1) / 5000)
+    } else if (height < 5000) {
+      var subsidy = new BN(150 * 1e8 * height / 5000)
+    } else {
+      var subsidy = new BN(150 * 1e8)
+    }
+    subsidy = subsidy.shrn(halvings);
+  }
   return parseInt(subsidy.toString(10));
 };
 

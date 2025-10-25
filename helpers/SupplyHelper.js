@@ -8,6 +8,7 @@ module.exports = {
      */
     getCirculatingSupplyByHeight: function (height) {
         let subsidy = 150;
+        let PONheight = 2020000 
         var halvings = Math.floor((height - 2500) / 655350);
         if (halvings >= 2) {
           halvings = 2
@@ -19,7 +20,7 @@ module.exports = {
             coins += 0
           } else if (i === halvings) {
             // good for last one
-            coins += (height - 657850 - ((i - 1) * 655350)) * subsidy;
+            coins += (Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
           } else {
             coins += 655350 * subsidy
           }
@@ -59,6 +60,10 @@ module.exports = {
         }
         if (height >= 1032114) {
           coins += 22000000;
+        }
+
+        if (height >= PONheight) {
+          coins += (height - PONheight + 1) * 14
         }
     
         var supply = new BigNumber(coins);

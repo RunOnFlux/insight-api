@@ -1397,7 +1397,7 @@ StatisticService.prototype.getCirculatingSupply = function () {
             coins += 0
         } else if (i === halvings) {
             // good for last one
-            coins += (Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
+            coins += (Math.min(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
         } else {
             coins += 655350 * subsidy
         }
@@ -1414,8 +1414,9 @@ StatisticService.prototype.getCirculatingSupply = function () {
 };
 StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     let subsidy = 150;
-    const height = this.node.services.bitcoind.height
     let PONheight = 2020000;
+    let realHeight = this.node.services.bitcoind.height;
+    const height = Math.min(realHeight, PONheight);
     var halvings = Math.floor((height - 2500) / 655350);
     if (halvings >= 2) {
         halvings = 2
@@ -1554,8 +1555,8 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
     }
 
     // Add PON (Proof of Node) rewards starting at height 2020000 with 14 flux per block
-    if (height >= PONheight) {
-        coins += (height - PONheight + 1) * 14;
+    if (realHeight >= PONheight) {
+        coins += (realHeight - PONheight + 1) * 14 * 2; // times 2 as per parallel assets
     }
 
     var supply = new BigNumber(coins.toString());
@@ -1565,7 +1566,10 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
 StatisticService.prototype.getTotalSupply = function () {
     const height = this.node.services.bitcoind.height
 
-    var supply = new BigNumber(440000000);
+    var supply = new BigNumber(560000000);
+    if (height < 2020000) {
+        return new BigNumber(440000000);
+    }
     if (height < 825000) {
         supply = new BigNumber(210000000);
     }
@@ -1574,8 +1578,10 @@ StatisticService.prototype.getTotalSupply = function () {
 };
 StatisticService.prototype.getTotalSupplyAllChains = function () {
     const height = this.node.services.bitcoind.height
-
-    var supply = new BigNumber(440000000);
+    var supply = new BigNumber(560000000);
+    if (height < 2020000) {
+        return new BigNumber(440000000);
+    }
     if (height < 825000) {
         supply = new BigNumber(210000000);
     }

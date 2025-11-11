@@ -20,7 +20,7 @@ module.exports = {
             coins += 0
           } else if (i === halvings) {
             // good for last one
-            coins += (Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
+            coins += (Math.min(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
           } else {
             coins += 655350 * subsidy
           }

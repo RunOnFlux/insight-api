@@ -1380,188 +1380,158 @@ StatisticService.prototype.getPoolInfo = function (paddress) {
  *
  * @return {BigNumber} supply - BigNumber representation of total supply
  */
+/**
+ * Calculate circulating supply for main chain only (single chain, not parallel assets)
+ * @return {BigNumber} supply - BigNumber representation of circulating supply
+ */
 StatisticService.prototype.getCirculatingSupply = function () {
+    const PON_HEIGHT = 2020000;
+    const FIRST_HALVING = 657850;
+    const HALVING_INTERVAL = 655350;
+    const EXCHANGE_FUND_HEIGHT = 835554;
+    const EXCHANGE_FUND_AMOUNT = 10000000;
+
+    // Time-locked fund releases (10 releases of 22M each)
+    const FUND_RELEASES = [
+        { height: 837714, amount: 22000000 },
+        { height: 859314, amount: 22000000 },
+        { height: 880914, amount: 22000000 },
+        { height: 902514, amount: 22000000 },
+        { height: 924114, amount: 22000000 },
+        { height: 945714, amount: 22000000 },
+        { height: 967314, amount: 22000000 },
+        { height: 988914, amount: 22000000 },
+        { height: 1010514, amount: 22000000 },
+        { height: 1032114, amount: 22000000 }
+    ];
+
     let subsidy = 150;
-    const height = this.node.services.bitcoind.height
-    let PONheight = 2020000;
-    var halvings = Math.floor((height - 2500) / 655350);
-    if (halvings >= 2) {
-        halvings = 2
+    const height = this.node.services.bitcoind.height;
+
+    // Traditional mining only goes up to PON_HEIGHT
+    const miningHeight = Math.min(height, PON_HEIGHT - 1);
+
+    // Calculate halvings (max 2)
+    const halvings = Math.min(2, Math.floor((miningHeight - 2500) / HALVING_INTERVAL));
+
+    // Initial supply: slow start + premine + dev fund
+    let coins = ((FIRST_HALVING - 5000) * 150) + 375000 + 13020000;
+
+    // Add exchange fund allocation if height reached
+    if (height >= EXCHANGE_FUND_HEIGHT) {
+        coins += EXCHANGE_FUND_AMOUNT;
     }
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000 + 22000000;
-    console.log(halvings);
+
+    // Add time-locked fund releases
+    FUND_RELEASES.forEach(release => {
+        if (height >= release.height) {
+            coins += release.amount;
+        }
+    });
+
+    // Calculate traditional mining rewards through halvings
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
-        console.log(subsidy);
-        if (i >= 64) {
-            coins += 0
-        } else if (i === halvings) {
-            // good for last one
-            coins += (Math.min(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
+
+        if (i === halvings) {
+            // Current/last halving period - partial blocks
+            coins += (miningHeight - FIRST_HALVING - ((i - 1) * HALVING_INTERVAL)) * subsidy;
         } else {
-            coins += 655350 * subsidy
+            // Completed halving period - full interval
+            coins += HALVING_INTERVAL * subsidy;
         }
     }
 
-    // Add PON (Proof of Node) rewards starting at height 2020000 with 14 flux per block
-    if (height >= PONheight) {
-        coins += (height - PONheight + 1) * 14;
+    // Add PON (Proof of Node) rewards after PON_HEIGHT
+    if (height >= PON_HEIGHT) {
+        coins += (height - PON_HEIGHT + 1) * 14;
     }
 
-    var supply = new BigNumber(coins);
-
-    return supply;
+    return new BigNumber(coins);
 };
 StatisticService.prototype.getCirculatingSupplyAllChains = function () {
+    const PON_HEIGHT = 2020000;
+    const ASSET_MINING_START = 825000;
+    const FIRST_HALVING = 657850;
+    const HALVING_INTERVAL = 655350;
+    const EXCHANGE_FUND_HEIGHT = 835554;
+    const EXCHANGE_FUND_AMOUNT = 10000000;
+    const CHAIN_FUND_AMOUNT = 1000000; // dev + exchange fund allocated per chain launch
+    const SNAPSHOT_AMOUNT = 12313785.94991485; // user snapshot per chain
+
+    // Parallel asset chain launch heights
+    const CHAINS = [
+        { name: 'KDA', launchHeight: 825000 },    // KDA is always active when asset mining starts
+        { name: 'BSC', launchHeight: 883000 },
+        { name: 'ETH', launchHeight: 883000 },
+        { name: 'SOL', launchHeight: 969500 },
+        { name: 'TRX', launchHeight: 969500 },
+        { name: 'AVAX', launchHeight: 1170000 },
+        { name: 'ERGO', launchHeight: 1210000 },
+        { name: 'ALGO', launchHeight: 1330000 },
+        { name: 'MATIC', launchHeight: 1414000 },
+        { name: 'BASE', launchHeight: 1738000 }
+    ];
+
     let subsidy = 150;
-    let PONheight = 2020000;
-    let realHeight = this.node.services.bitcoind.height;
-    const height = Math.min(realHeight, PONheight);
-    var halvings = Math.floor((height - 2500) / 655350);
-    if (halvings >= 2) {
-        halvings = 2
+    const realHeight = this.node.services.bitcoind.height;
+
+    // Traditional mining only goes up to PON_HEIGHT, then PON takes over
+    const miningHeight = Math.min(realHeight, PON_HEIGHT - 1);
+
+    // Calculate halvings (max 2) for traditional mining period
+    const halvings = Math.min(2, Math.floor((miningHeight - 2500) / HALVING_INTERVAL));
+
+    // Initial supply: slow start + premine + dev fund
+    let coins = ((FIRST_HALVING - 5000) * 150) + 375000 + 13020000;
+
+    // Add exchange fund allocation if height reached
+    if (realHeight >= EXCHANGE_FUND_HEIGHT) {
+        coins += EXCHANGE_FUND_AMOUNT;
     }
-    var coins = ((657850 - 5000) * 150) + 375000 + 13020000 + 10000000; // slowstart, premine, dev fund + exchange fund
-    coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for kda
-    if (height > 883000) { // bsc goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for bsc
-    }
-    if (height > 883000) { // eth goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for eth
-    }
-    if (height > 969500) { // sol goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for sol
-    }
-    if (height > 969500) { // trx goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for trx
-    }
-    if (height > 1170000) { // avax goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for avax
-    }
-    if (height > 1210000) { // ergo goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for erg
-    }
-    if (height > 1330000) { // algo goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for algo
-    }
-    if (height > 1414000) { // matic goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for matic
-    }
-    if (height > 1738000) { // base goes live
-        coins = coins + 1000000 + 12313785.94991485; // dev + exchange fund on kda, snapshot for base
-    }
+
+    // Add snapshot amounts and chain funds for launched chains
+    CHAINS.forEach(chain => {
+        if (realHeight > chain.launchHeight) {
+            coins += CHAIN_FUND_AMOUNT + SNAPSHOT_AMOUNT;
+        }
+    });
+
+    // Calculate traditional mining rewards through halvings (only up to PON_HEIGHT)
     for (let i = 1; i <= halvings; i++) {
         subsidy = subsidy / 2;
-        if (i >= 64) {
-            coins += 0
-        } else if (i === halvings) { // from second halving onwards
-            // good for last one
-            const nBlocksMain = Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350);
-            const nBlocksAsset = nBlocksMain;
-            coins += (Math.max(height, PONheight - 1) - 657850 - ((i - 1) * 655350)) * subsidy;
-            if (height > 825000) { // kda chain mining
-                coins += (nBlocksAsset * subsidy / 10);
-            }
-            if (height > 883000) { // snapshot height for main chain for eth, bsc
-                if (height > 825000) { // eth mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-                if (height > 825000) { // bsc mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 969500) { // snapshot height for main chain for sol, trx
-                if (height > 825000) { // sol mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-                if (height > 825000) { // trx mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax, + 22000000
-                if (height > 825000) { // avax mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1210000) { // release height. Snapshot height for is 1114211 for erg, + 22000000
-                if (height > 825000) { // erg mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1330000) { // release height for algo
-                if (height > 825000) { // algo mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1414000) { // release height for matic
-                if (height > 825000) { // matic mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1738000) { // release height for base
-                if (height > 825000) { // base mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-        } else { // from first to second halving
-            coins += 655350 * subsidy
-            const nBlocksAsset = 655350 - (825000 - 657850);
 
-            if (height > 825000) { // kda chain mining
-                coins += (nBlocksAsset * subsidy / 10);
+        if (i === halvings) {
+            // Current/last halving period - calculate partial blocks up to PON_HEIGHT
+            const nBlocksMain = miningHeight - FIRST_HALVING - ((i - 1) * HALVING_INTERVAL);
+            coins += nBlocksMain * subsidy;
+
+            // Add parallel asset mining rewards (1/10 of main chain subsidy)
+            if (miningHeight > ASSET_MINING_START) {
+                const activeChains = CHAINS.filter(chain => miningHeight > chain.launchHeight).length;
+                coins += nBlocksMain * subsidy * activeChains / 10;
             }
-            if (height > 883000) { // snapshot height for main chain for eth, bsc
-                if (height > 825000) { // eth mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-                if (height > 825000) { // bsc mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 969500) { // snapshot height for main chain for sol, trx
-                if (height > 825000) { // sol mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-                if (height > 825000) { // trx mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1170000) { // release height. Snapshot height for is 1114211 for avax, + 22000000
-                if (height > 825000) { // avax mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1210000) { // release height. Snapshot height for is 1114211 for erg, + 22000000
-                if (height > 825000) { // erg mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1330000) { // release height for algo
-                if (height > 825000) { // algo mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1414000) { // release height for matic
-                if (height > 825000) { // matic mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
-            }
-            if (height > 1738000) { // release height for base
-                if (height > 825000) { // base mining
-                    coins += (nBlocksAsset * subsidy / 10);
-                }
+        } else {
+            // Completed halving periods - full interval
+            coins += HALVING_INTERVAL * subsidy;
+
+            // Add parallel asset mining for the completed period
+            if (miningHeight > ASSET_MINING_START) {
+                // Only count blocks after asset mining started
+                const nBlocksAsset = HALVING_INTERVAL - (ASSET_MINING_START - FIRST_HALVING);
+                const activeChains = CHAINS.filter(chain => miningHeight > chain.launchHeight).length;
+                coins += nBlocksAsset * subsidy * activeChains / 10;
             }
         }
     }
 
-    // Add PON (Proof of Node) rewards starting at height 2020000 with 14 flux per block
-    if (realHeight >= PONheight) {
-        coins += (realHeight - PONheight + 1) * 14 * 2; // times 2 as per parallel assets
+    // Add PON (Proof of Node) rewards after PON_HEIGHT - this replaces traditional mining
+    if (realHeight >= PON_HEIGHT) {
+        const ponBlocks = realHeight - PON_HEIGHT + 1;
+        coins += ponBlocks * 14 * 2; // 14 flux per block × 2 (parallel assets)
     }
 
-    var supply = new BigNumber(coins.toString());
-
-    return supply;
+    return new BigNumber(coins.toString());
 };
 StatisticService.prototype.getTotalSupply = function () {
     const height = this.node.services.bitcoind.height

@@ -3,6 +3,7 @@ var async = require('async');
 var bitcore = require('bitcore-lib');
 var TYPE = 'BLOCKS_MINED';
 var BN = bitcore.crypto.BN;
+var PonHelper = require('../helpers/PonHelper');
 
 function AddressBlocksMinedService(options) {
 
@@ -274,9 +275,9 @@ AddressBlocksMinedService.prototype.processBlock = function (blockHeight, next) 
 };
 
 AddressBlocksMinedService.prototype.getBlockReward = function(height) {
-  if (height >= 2020000) {
-    // PON (Proof of Node) reward starting at height 2020000
-    return 14 * 1e8;
+  if (height >= PonHelper.PON_ACTIVATION_HEIGHT) {
+    // PON (Proof of Node) reward starting at height 2020000, reduced by 10% every year
+    return PonHelper.getPonSubsidySats(height);
   } else {
     // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
     var halvings;

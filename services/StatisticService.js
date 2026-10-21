@@ -9,6 +9,7 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var STATISTIC_TYPE = 'STATISTIC';
 var SupplyHelper = require('../helpers/SupplyHelper');
+var PonHelper = require('../helpers/PonHelper');
 var BN = bitcore.crypto.BN;
 var pools = require('../pools.json');
 var _ = require('lodash');
@@ -1283,8 +1284,9 @@ StatisticService.prototype.getPoolsLastHour = function (nextCb) {
 StatisticService.prototype.getBlockReward = function (height, callback) {
     // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
     var halvings;
-    if (height >= 2020000) {
-        var subsidy = new BN(14 * 1e8);
+    if (height >= PonHelper.PON_ACTIVATION_HEIGHT) {
+        // PON (Proof of Node) reward, reduced by 10% every year
+        var subsidy = new BN(PonHelper.getPonSubsidySats(height));
     } else {
         if (height <= 5000) {
             halvings = 0
@@ -1324,8 +1326,9 @@ StatisticService.prototype.getBlockReward = function (height, callback) {
 };
 
 StatisticService.prototype.getBlockRewardr = function (height) {
-    if (height >= 2020000) {
-        var subsidy = new BN(14 * 1e8);
+    if (height >= PonHelper.PON_ACTIVATION_HEIGHT) {
+        // PON (Proof of Node) reward, reduced by 10% every year
+        var subsidy = new BN(PonHelper.getPonSubsidySats(height));
     } else {
         // Subsidy is cut in half every 657850 blocks which will occur approximately every 2.5 years.
         var halvings;
@@ -1385,7 +1388,7 @@ StatisticService.prototype.getPoolInfo = function (paddress) {
  * @return {BigNumber} supply - BigNumber representation of circulating supply
  */
 StatisticService.prototype.getCirculatingSupply = function () {
-    const PON_HEIGHT = 2020000;
+    const PON_HEIGHT = PonHelper.PON_ACTIVATION_HEIGHT;
     const FIRST_HALVING = 657850;
     const HALVING_INTERVAL = 655350;
     const EXCHANGE_FUND_HEIGHT = 835554;
@@ -1442,15 +1445,17 @@ StatisticService.prototype.getCirculatingSupply = function () {
         }
     }
 
-    // Add PON (Proof of Node) rewards after PON_HEIGHT
+    let supply = new BigNumber(coins);
+
+    // Add PON (Proof of Node) rewards after PON_HEIGHT (block subsidy reduces 10% per year, see PonHelper)
     if (height >= PON_HEIGHT) {
-        coins += (height - PON_HEIGHT + 1) * 14;
+        supply = supply.plus(PonHelper.getPonEmission(height));
     }
 
-    return new BigNumber(coins);
+    return supply;
 };
 StatisticService.prototype.getCirculatingSupplyAllChains = function () {
-    const PON_HEIGHT = 2020000;
+    const PON_HEIGHT = PonHelper.PON_ACTIVATION_HEIGHT;
     const ASSET_MINING_START = 825000;
     const FIRST_HALVING = 657850;
     const HALVING_INTERVAL = 655350;
@@ -1527,8 +1532,8 @@ StatisticService.prototype.getCirculatingSupplyAllChains = function () {
 
     // Add PON (Proof of Node) rewards after PON_HEIGHT - this replaces traditional mining
     if (realHeight >= PON_HEIGHT) {
-        const ponBlocks = realHeight - PON_HEIGHT + 1;
-        coins += ponBlocks * 14 * 2; // 14 flux per block × 2 (parallel assets)
+        // PON emission (block subsidy reduces 10% per year) × 2 (parallel assets)
+        coins += PonHelper.getPonEmission(realHeight).times(2).toNumber();
     }
 
     return new BigNumber(coins.toString());
@@ -1537,7 +1542,7 @@ StatisticService.prototype.getTotalSupply = function () {
     const height = this.node.services.bitcoind.height
 
     var supply = new BigNumber(560000000);
-    if (height < 2020000) {
+    if (height < PonHelper.PON_ACTIVATION_HEIGHT) {
         return new BigNumber(440000000);
     }
     if (height < 825000) {
@@ -1549,7 +1554,7 @@ StatisticService.prototype.getTotalSupply = function () {
 StatisticService.prototype.getTotalSupplyAllChains = function () {
     const height = this.node.services.bitcoind.height
     var supply = new BigNumber(560000000);
-    if (height < 2020000) {
+    if (height < PonHelper.PON_ACTIVATION_HEIGHT) {
         return new BigNumber(440000000);
     }
     if (height < 825000) {

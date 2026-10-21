@@ -1,4 +1,5 @@
 var BigNumber = require('bignumber.js');
+var PonHelper = require('./PonHelper');
 
 module.exports = {
     /**
@@ -7,7 +8,7 @@ module.exports = {
      * @return {BigNumber} - Circulating supply
      */
     getCirculatingSupplyByHeight: function (height) {
-        const PON_HEIGHT = 2020000;
+        const PON_HEIGHT = PonHelper.PON_ACTIVATION_HEIGHT;
         const FIRST_HALVING = 657850;
         const HALVING_INTERVAL = 655350;
 
@@ -58,12 +59,14 @@ module.exports = {
             }
         });
 
-        // Add PON rewards after PON_HEIGHT
+        let supply = new BigNumber(coins);
+
+        // Add PON rewards after PON_HEIGHT (block subsidy reduces 10% per year, see PonHelper)
         if (height >= PON_HEIGHT) {
-            coins += (height - PON_HEIGHT + 1) * 14;
+            supply = supply.plus(PonHelper.getPonEmission(height));
         }
 
-        return new BigNumber(coins);
+        return supply;
     },
 
     getTotalSupplyByHeight: function (height) {

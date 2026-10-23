@@ -76,12 +76,12 @@
     "bignumber.js": "^11.1.5",
     "bitcore-lib": "https://github.com/runonflux/bitcore-lib#master",
     "bitcore-message": "https://github.com/runonflux/bitcore-message#master",
-    "body-parser": "^1.13.3",
-    "compression": "^1.6.1",
+    "body-parser": "^2.4.0",
+    "compression": "^1.8.2",
     "lodash": "^4.18.1",
     "lru-cache": "^11.5.3",
     "mongoose": "^9.11.3",
-    "morgan": "^1.7.0"
+    "morgan": "^1.12.1"
   },
   "peerDependencies": {},
   "devDependencies": {

@@ -172,7 +172,7 @@ describe('Transactions', function() {
   });
 
   describe('/txs', function() {
-    var sandbox = sinon.createSandbox ? sinon.createSandbox() : sinon.sandbox.create();
+    var sandbox = sinon.createSandbox();
     afterEach(function() {
       sandbox.restore();
     });

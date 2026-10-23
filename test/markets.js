@@ -32,7 +32,7 @@ describe('Markets', function() {
 
   function serviceWith(get) {
     var MarketsService = proxyquire('../services/MarketsService', {
-      request: {get: get}
+      '../helpers/HttpHelper': {get: get}
     });
     var node = {
       log: {
@@ -64,10 +64,8 @@ describe('Markets', function() {
     var get = sinon.stub();
     var t = serviceWith(get);
     get.callCount.should.equal(1);
-    get.args[0][0].should.eql({
-      url: 'https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD',
-      json: true
-    });
+    get.args[0][0].should.equal('https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD');
+    get.args[0][1].should.eql({json: true});
     t.service.on('updated', function(info) {
       info.should.eql({
         price: 0.4321,
@@ -79,7 +77,7 @@ describe('Markets', function() {
       t.log.error.callCount.should.equal(0);
       done();
     });
-    get.args[0][1](null, {statusCode: 200}, tickerData);
+    get.args[0][2](null, {statusCode: 200}, tickerData);
   });
 
   it('will refresh every 90 seconds', function() {
@@ -97,7 +95,7 @@ describe('Markets', function() {
     var t = serviceWith(get);
     var updated = sinon.stub();
     t.service.on('updated', updated);
-    get.args[0][1](new Error('offline'));
+    get.args[0][2](new Error('offline'));
     t.log.error.callCount.should.equal(1);
     t.log.error.args[0][0].should.equal('Coinpaprika error');
     updated.callCount.should.equal(0);
@@ -107,7 +105,7 @@ describe('Markets', function() {
   it('will log a status other than 200', function() {
     var get = sinon.stub();
     var t = serviceWith(get);
-    get.args[0][1](null, {statusCode: 429}, {});
+    get.args[0][2](null, {statusCode: 429}, {});
     t.log.error.callCount.should.equal(1);
     t.log.error.args[0][0].should.equal('Coinpaprika error status code');
     t.log.error.args[0][1].should.equal(429);
@@ -116,7 +114,7 @@ describe('Markets', function() {
   it('will log an empty body', function() {
     var get = sinon.stub();
     var t = serviceWith(get);
-    get.args[0][1](null, {statusCode: 200}, '');
+    get.args[0][2](null, {statusCode: 200}, '');
     t.log.error.callCount.should.equal(1);
     t.log.error.args[0][0].should.equal('Coinpaprika error body');
   });

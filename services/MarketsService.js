@@ -1,7 +1,6 @@
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-var request = require('request');
-var _ = require('lodash');
+var HttpHelper = require('../helpers/HttpHelper');
 var Common = require('../lib/common');
 
 function MarketsService(options) {
@@ -30,8 +29,7 @@ util.inherits(MarketsService, EventEmitter);
 
 MarketsService.prototype._updateInfo = function () {
     var self = this;
-    return request.get({
-        url: 'https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD',
+    return HttpHelper.get('https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD', {
         json: true
     }, function (err, response, body) {
 

@@ -162,10 +162,10 @@ function testNode() {
 }
 
 function start(done) {
-  var currencyRequest = sinon.stub().callsArgWith(1, null, {statusCode: 200}, JSON.stringify({quotes: {USD: {price: 0.4321}}}));
+  var currencyRequest = sinon.stub().callsArgWith(2, null, {statusCode: 200}, JSON.stringify({quotes: {USD: {price: 0.4321}}}));
   var InsightAPI = proxyquire('../lib/index', {
     '../services/MarketsService': MarketsServiceStub,
-    './currency': proxyquire('../lib/currency', {request: currencyRequest})
+    './currency': proxyquire('../lib/currency', {'../helpers/HttpHelper': {get: currencyRequest}})
   });
   var node = testNode();
   var insight = new InsightAPI({node: node, name: 'insight-api', routePrefix: 'api'});

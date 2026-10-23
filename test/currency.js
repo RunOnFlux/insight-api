@@ -21,7 +21,7 @@ describe('Currency', function() {
 
   function controllerWith(request) {
     var TestCurrencyController = proxyquire('../lib/currency', {
-      request: request
+      '../helpers/HttpHelper': {get: request}
     });
     var node = {
       log: {
@@ -32,7 +32,7 @@ describe('Currency', function() {
   }
 
   it('will retrieve a fresh value', function(done) {
-    var request = sinon.stub().callsArgWith(1, null, {statusCode: 200}, JSON.stringify(tickerData));
+    var request = sinon.stub().callsArgWith(2, null, {statusCode: 200}, JSON.stringify(tickerData));
     var currency = controllerWith(request);
     currency.rate = 0.22;
     currency.timestamp = Date.now() - 61000 * CurrencyController.DEFAULT_CURRENCY_DELAY;
@@ -46,6 +46,7 @@ describe('Currency', function() {
           }
         });
         request.args[0][0].should.equal(TICKER);
+        request.args[0][1].should.eql({});
         currency.rate.should.equal(0.4321);
         done();
       }
@@ -54,7 +55,7 @@ describe('Currency', function() {
   });
 
   it('will retrieve a value when no rate is known yet', function(done) {
-    var request = sinon.stub().callsArgWith(1, null, {statusCode: 200}, JSON.stringify(tickerData));
+    var request = sinon.stub().callsArgWith(2, null, {statusCode: 200}, JSON.stringify(tickerData));
     var currency = controllerWith(request);
     var res = {
       jsonp: function(response) {
@@ -67,7 +68,7 @@ describe('Currency', function() {
   });
 
   it('will log an error from request and keep the last rate', function(done) {
-    var request = sinon.stub().callsArgWith(1, new Error('test'));
+    var request = sinon.stub().callsArgWith(2, new Error('test'));
     var currency = controllerWith(request);
     currency.rate = 0.3;
     currency.timestamp = Date.now() - 65000 * CurrencyController.DEFAULT_CURRENCY_DELAY;
@@ -88,7 +89,7 @@ describe('Currency', function() {
   });
 
   it('will keep the last rate on a status other than 200', function(done) {
-    var request = sinon.stub().callsArgWith(1, null, {statusCode: 502}, 'Bad Gateway');
+    var request = sinon.stub().callsArgWith(2, null, {statusCode: 502}, 'Bad Gateway');
     var currency = controllerWith(request);
     currency.rate = 0.3;
     currency.timestamp = Date.now() - 65000 * CurrencyController.DEFAULT_CURRENCY_DELAY;
@@ -103,7 +104,7 @@ describe('Currency', function() {
   });
 
   it('will reset the rate to 0 on a body without a USD price', function(done) {
-    var request = sinon.stub().callsArgWith(1, null, {statusCode: 200}, 'not json');
+    var request = sinon.stub().callsArgWith(2, null, {statusCode: 200}, 'not json');
     var currency = controllerWith(request);
     currency.rate = 0.3;
     currency.timestamp = Date.now() - 65000 * CurrencyController.DEFAULT_CURRENCY_DELAY;

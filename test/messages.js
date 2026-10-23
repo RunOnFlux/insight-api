@@ -4,19 +4,22 @@ var should = require('should');
 var sinon = require('sinon');
 var MessagesController = require('../lib/messages');
 var bitcore = require('bitcore-lib');
-var _ = require('lodash');
 
 describe('Messages', function() {
 
-  var privateKey = bitcore.PrivateKey.fromWIF('cQwApHAg8hw9AZuxiU4a7g9kFWdaemhPxVZXWiAKgJTx6dPP32fN');
-  var address = 'mswTKCE2tYSFvUNnNPBKZfeNmugYL1rZMx';
-  var badAddress = 'mswTKCE2tYSFvUNnNPBKZfeNmuhYL1rZMm';
-  var signature = 'IA4sIwhcLMPPsYtB8tN0PI+aQuwDyl+/4Ksa89llNSAeVaRdMyyIxpo1H5N3GHbPl9LQqZ7CvaokeQgsOkK9fn4=';
+  var privateKey = bitcore.PrivateKey.fromWIF('cN9spWsvaxA8taS7DFMxnk1yJD2gaF2PX1npuTpy3vuZFJdwavaw');
+  var address = 'tmYjAZFpvdDXTaJrq2WikAntitBNJJo9VSo';
+  var badAddress = 'tmYjAZFpvdDXTaJrq2WikAntitBNJJo9Vao';
+  var signature = 'ILAX0fA8zFP6pdb3yKnXzp6dxPfjLJs2CyCTo12IwrdkTarHrEyNT9+sPZzMwdrzC8yhFoPCefOThRWKqILmwsU=';
   var message = 'cellar door';
+
+  it('the fixture signature belongs to the fixture key', function() {
+    privateKey.toAddress().toString().should.equal(address);
+  });
 
   it('will verify a message (true)', function(done) {
 
-    var controller = new MessagesController({node: {}});
+    var controller = new MessagesController({log: {error: sinon.stub()}});
 
     var req = {
       body: {
@@ -38,7 +41,7 @@ describe('Messages', function() {
 
   it('will verify a message (false)', function(done) {
 
-    var controller = new MessagesController({node: {}});
+    var controller = new MessagesController({log: {error: sinon.stub()}});
 
     var req = {
       body: {
@@ -59,7 +62,7 @@ describe('Messages', function() {
   });
 
   it('handle an error from message verification', function(done) {
-    var controller = new MessagesController({node: {}});
+    var controller = new MessagesController({log: {error: sinon.stub()}});
     var req = {
       body: {
         'address': badAddress,
@@ -80,7 +83,7 @@ describe('Messages', function() {
   });
 
   it('handle error with missing parameters', function(done) {
-    var controller = new MessagesController({node: {}});
+    var controller = new MessagesController({log: {error: sinon.stub()}});
     var req = {
       body: {},
       query: {}

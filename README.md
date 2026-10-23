@@ -22,6 +22,8 @@ The API endpoints will be available by default at: `http://localhost:3001/insigh
 ## Prerequisites
 
 - [bitcore Node](https://github.com/runonflux/bitcore-node)
+- Node.js 24 or later
+- MongoDB 4.4 or later, set as `db` in the service config (`host`, `port`, `database`, and `user`/`password` when the server needs them)
 
 **Note:** You can use an existing Flux data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `flux.conf`, as well as a few other additional fields.
 

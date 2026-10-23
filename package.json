@@ -64,7 +64,7 @@
     "flux"
   ],
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=24"
   },
   "scripts": {
     "test": "NODE_ENV=test mocha -R spec --recursive"
@@ -74,8 +74,8 @@
   "dependencies": {
     "async": "^3.2.6",
     "bignumber.js": "^11.1.5",
-    "bitcore-lib": "https://github.com/runonflux/bitcore-lib#master",
-    "bitcore-message": "https://github.com/runonflux/bitcore-message#master",
+    "bitcore-lib": "git+https://github.com/runonflux/bitcore-lib.git#8f5453fdcee462e30532f9f93884ebe6aff71ef9",
+    "bitcore-message": "git+https://github.com/runonflux/bitcore-message.git#ec2fb0ab303c51b1c2654c35fdd1f807b11bf7e8",
     "body-parser": "^2.4.0",
     "compression": "^1.8.2",
     "lodash": "^4.18.1",

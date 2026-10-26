@@ -27,8 +27,8 @@ In a bitcore Node's directory (`bitcore-node create <dir>`):
 npm install @runonflux/insight-api
 ```
 
-then add `@runonflux/insight-api` to `services` in `bitcore-node.json`. Its settings go under the
-same name in `servicesConfig`.
+then add `@runonflux/insight-api` to `services` in `bitcore-node.json`. bitcore-node runs it as the
+service `insight-api`, and its settings go under that name in `servicesConfig`.
 
 ## Prerequisites
 
@@ -43,7 +43,7 @@ same name in `servicesConfig`.
 To protect the server, insight-api has a built it query rate limiter. It can be configurable in `bitcore-node.json` with:
 ``` json
   "servicesConfig": {
-    "@runonflux/insight-api": {
+    "insight-api": {
       "rateLimiterOptions": {
         "whitelist": ["::ffff:127.0.0.1"]
       }
@@ -55,7 +55,7 @@ With all the configuration options available: https://github.com/runonflux/insig
 Or disabled entirely with:
 ``` json
   "servicesConfig": {
-    "@runonflux/insight-api": {
+    "insight-api": {
       "disableRateLimiter": true
     }
   }
@@ -65,7 +65,7 @@ Or disabled entirely with:
 
 ``` json
   "servicesConfig": {
-    "@runonflux/insight-api": {
+    "insight-api": {
       "routePrefix": "insight-api",
     }
   }

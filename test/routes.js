@@ -8,7 +8,7 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var express = require('express');
 var bodyParser = require('body-parser');
-var bitcore = require('bitcore-lib');
+var bitcore = require('@runonflux/bitcore-lib');
 
 var blocks = require('./data/blocks.json');
 var expected = require('./data/routes.json');

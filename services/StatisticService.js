@@ -1,7 +1,7 @@
 'use strict';
 
 var async = require('async');
-var bitcore = require('bitcore-lib');
+var bitcore = require('@runonflux/bitcore-lib');
 var BigNumber = require('bignumber.js');
 var CacheHelper = require('../helpers/CacheHelper');
 var Common = require('../lib/common');

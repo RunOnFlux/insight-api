@@ -19,6 +19,17 @@ This is a backend-only service. If you're looking for the web frontend applicati
 
 The API endpoints will be available by default at: `http://localhost:3001/insight-api/`
 
+## Getting Started
+
+In a bitcore Node's directory (`bitcore-node create <dir>`):
+
+```sh
+npm install @runonflux/insight-api
+```
+
+then add `@runonflux/insight-api` to `services` in `bitcore-node.json`. Its settings go under the
+same name in `servicesConfig`.
+
 ## Prerequisites
 
 - [bitcore Node](https://github.com/runonflux/bitcore-node)
@@ -32,7 +43,7 @@ The API endpoints will be available by default at: `http://localhost:3001/insigh
 To protect the server, insight-api has a built it query rate limiter. It can be configurable in `bitcore-node.json` with:
 ``` json
   "servicesConfig": {
-    "insight-api": {
+    "@runonflux/insight-api": {
       "rateLimiterOptions": {
         "whitelist": ["::ffff:127.0.0.1"]
       }
@@ -44,7 +55,7 @@ With all the configuration options available: https://github.com/runonflux/insig
 Or disabled entirely with:
 ``` json
   "servicesConfig": {
-    "insight-api": {
+    "@runonflux/insight-api": {
       "disableRateLimiter": true
     }
   }
@@ -54,7 +65,7 @@ Or disabled entirely with:
 
 ``` json
   "servicesConfig": {
-    "insight-api": {
+    "@runonflux/insight-api": {
       "routePrefix": "insight-api",
     }
   }

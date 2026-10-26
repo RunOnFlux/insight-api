@@ -4,7 +4,7 @@ var should = require('should');
 var sinon = require('sinon');
 var BlockController = require('../lib/blocks');
 var TransactionService = require('../services/TransactionService');
-var bitcore = require('bitcore-lib');
+var bitcore = require('@runonflux/bitcore-lib');
 
 var blocks = require('./data/blocks.json');
 

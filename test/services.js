@@ -2,7 +2,7 @@
 
 var should = require('should');
 var sinon = require('sinon');
-var bitcore = require('bitcore-lib');
+var bitcore = require('@runonflux/bitcore-lib');
 var StatisticService = require('../services/StatisticService');
 var AddressBalanceService = require('../services/AddressBalanceService');
 var AddressBlocksMinedService = require('../services/AddressBlocksMinedService');

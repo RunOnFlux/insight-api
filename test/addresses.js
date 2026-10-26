@@ -723,6 +723,46 @@ describe('Addresses', function() {
       addresses.multitxs(req, res);
     });
   });
+  describe('#checkAddrs', function() {
+    var A = 'tmEbKCSNbQYhwoR2mDKLNTqqhS2h8dPfWbK';
+    var B = 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL';
+    function run(req) {
+      var addresses = new AddressController({node: {log: {error: sinon.stub()}}});
+      var out = {next: false};
+      var res = {
+        status: function(code) { out.status = code; return res; },
+        send: function(body) { out.body = body; }
+      };
+      addresses.checkAddrs(req, res, function() { out.next = true; });
+      out.addrs = req.addrs;
+      return out;
+    }
+    it('answers 400 "Must include address" with no addresses in the form or the path', function() {
+      var out = run({body: {}, params: {}});
+      out.should.eql({next: false, status: 400, body: 'Must include address. Code:1', addrs: ['']});
+    });
+    it('answers 400 "Must include address" for an empty form value', function() {
+      var out = run({body: {addrs: ''}, params: {}});
+      out.status.should.equal(400);
+      out.body.should.equal('Must include address. Code:1');
+    });
+    it('takes the form\'s addresses before the path\'s', function() {
+      var out = run({body: {addrs: A + ',' + B}, params: {addrs: 'notanaddress'}});
+      out.next.should.equal(true);
+      out.addrs.should.eql([A, B]);
+    });
+    it('takes the path\'s addresses without a form', function() {
+      var out = run({body: {}, params: {addrs: A}});
+      out.next.should.equal(true);
+      out.addrs.should.eql([A]);
+    });
+    it('takes a form list of addresses', function() {
+      var out = run({body: {addrs: [A, B]}, params: {}});
+      out.next.should.equal(true);
+      out.addrs.should.eql([A, B]);
+    });
+  });
+
   describe('#_getTransformOptions', function() {
     it('will return false with value of string "0"', function() {
       var node = {};

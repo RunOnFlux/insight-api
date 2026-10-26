@@ -19,7 +19,7 @@ describe('Currency', function() {
     }
   };
 
-  function controllerWith(request) {
+  function controllerWith(request, proxy) {
     var TestCurrencyController = proxyquire('../lib/currency', {
       '../helpers/HttpHelper': {get: request}
     });
@@ -28,8 +28,15 @@ describe('Currency', function() {
         error: sinon.stub()
       }
     };
-    return new TestCurrencyController({node: node, coinTicker: TICKER, coinShort: 'FLUX'});
+    return new TestCurrencyController({node: node, coinTicker: TICKER, coinShort: 'FLUX', proxy: proxy});
   }
+
+  it('will send the ticker request through the configured proxy', function() {
+    var request = sinon.stub().callsArgWith(2, null, {statusCode: 200}, JSON.stringify(tickerData));
+    var currency = controllerWith(request, 'http://10.0.0.1:3128');
+    currency.index({}, {jsonp: function() {}});
+    request.args[0][1].should.eql({proxy: 'http://10.0.0.1:3128'});
+  });
 
   it('will retrieve a fresh value', function(done) {
     var request = sinon.stub().callsArgWith(2, null, {statusCode: 200}, JSON.stringify(tickerData));
@@ -46,7 +53,7 @@ describe('Currency', function() {
           }
         });
         request.args[0][0].should.equal(TICKER);
-        request.args[0][1].should.eql({});
+        request.args[0][1].should.eql({proxy: undefined});
         currency.rate.should.equal(0.4321);
         done();
       }

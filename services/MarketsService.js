@@ -6,6 +6,7 @@ var Common = require('../lib/common');
 function MarketsService(options) {
 
     this.common = new Common({ log: options.node.log });
+    this.proxy = options.proxy;
 
     this.info = {
         price: 0,
@@ -30,7 +31,8 @@ util.inherits(MarketsService, EventEmitter);
 MarketsService.prototype._updateInfo = function () {
     var self = this;
     return HttpHelper.get('https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD', {
-        json: true
+        json: true,
+        proxy: self.proxy
     }, function (err, response, body) {
 
         if (err) {

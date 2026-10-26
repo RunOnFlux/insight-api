@@ -2,6 +2,7 @@
 
 var should = require('should');
 var http = require('http');
+var net = require('net');
 var HttpHelper = require('../helpers/HttpHelper');
 
 describe('HttpHelper', function() {
@@ -78,6 +79,67 @@ describe('HttpHelper', function() {
       response.statusCode.should.equal(503);
       body.should.equal('busy');
       done();
+    });
+  });
+
+  describe('through a proxy', function() {
+    var proxy;
+    var proxyUrl;
+    var seen;
+
+    before(function(done) {
+      // an HTTP proxy: forwards a plain request for an absolute URL, tunnels a CONNECT
+      proxy = http.createServer(function(req, res) {
+        seen.push(req.url);
+        var upstream = http.request(req.url, {method: req.method, headers: req.headers}, function(answer) {
+          res.writeHead(answer.statusCode, answer.headers);
+          answer.pipe(res);
+        });
+        req.pipe(upstream);
+      });
+      proxy.on('connect', function(req, socket, head) {
+        seen.push(req.url);
+        var parts = req.url.split(':');
+        var upstream = net.connect(Number(parts[1]), parts[0], function() {
+          socket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
+          upstream.write(head);
+          upstream.pipe(socket);
+          socket.pipe(upstream);
+        });
+        upstream.on('error', function() {
+          socket.destroy();
+        });
+      });
+      proxy.listen(0, '127.0.0.1', function() {
+        proxyUrl = 'http://127.0.0.1:' + proxy.address().port;
+        done();
+      });
+    });
+
+    beforeEach(function() {
+      seen = [];
+    });
+
+    after(function(done) {
+      proxy.close(done);
+    });
+
+    it('will send the request through the proxy', function(done) {
+      HttpHelper.get(base + '/json', {json: true, proxy: proxyUrl}, function(err, response, body) {
+        should.not.exist(err);
+        response.statusCode.should.equal(200);
+        body.quotes.USD.price.should.equal(1.5);
+        seen.should.eql([base + '/json']);
+        done();
+      });
+    });
+
+    it('will give a connection error when the proxy cannot be reached', function(done) {
+      HttpHelper.get(base + '/json', {proxy: 'http://127.0.0.1:1'}, function(err, response) {
+        should.exist(err);
+        should.not.exist(response);
+        done();
+      });
     });
   });
 

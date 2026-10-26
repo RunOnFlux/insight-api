@@ -30,7 +30,7 @@ describe('Markets', function() {
     clock.restore();
   });
 
-  function serviceWith(get) {
+  function serviceWith(get, proxy) {
     var MarketsService = proxyquire('../services/MarketsService', {
       '../helpers/HttpHelper': {get: get}
     });
@@ -40,7 +40,7 @@ describe('Markets', function() {
       }
     };
     return {
-      service: new MarketsService({node: node}),
+      service: new MarketsService({node: node, proxy: proxy}),
       log: node.log
     };
   }
@@ -60,12 +60,18 @@ describe('Markets', function() {
     });
   });
 
+  it('will send the ticker request through the configured proxy', function() {
+    var get = sinon.stub();
+    serviceWith(get, 'http://10.0.0.1:3128');
+    get.args[0][1].should.eql({json: true, proxy: 'http://10.0.0.1:3128'});
+  });
+
   it('will update market info from the ticker and emit updated', function(done) {
     var get = sinon.stub();
     var t = serviceWith(get);
     get.callCount.should.equal(1);
     get.args[0][0].should.equal('https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD');
-    get.args[0][1].should.eql({json: true});
+    get.args[0][1].should.eql({json: true, proxy: undefined});
     t.service.on('updated', function(info) {
       info.should.eql({
         price: 0.4321,

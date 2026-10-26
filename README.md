@@ -71,6 +71,21 @@ Or disabled entirely with:
   }
 ```
 
+## Price Requests Through a Proxy
+
+The price (`/currency`, `/markets/info` and the socket.io `markets_info` event) comes from
+Coinpaprika. On a server that reaches the internet only through an HTTP proxy, name it in
+`bitcore-node.json`:
+
+``` json
+  "servicesConfig": {
+    "insight-api": {
+      "proxy": "http://10.0.0.1:3128"
+    }
+  }
+```
+Without `proxy` the requests go direct.
+
 
 
 ## API HTTP Endpoints

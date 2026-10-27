@@ -28,21 +28,21 @@ function StatisticService(options) {
     this.txController = options.txController;
 
     /**
-     * 24h Cache
+     * 24h Cache: the blocks of the last day, each expiring as it leaves it
      */
-    this.subsidyByBlockHeight = CacheHelper.create(999999);
-    this.blocksByHeight = CacheHelper.create(999999);
-    this.feeByHeight = CacheHelper.create(999999);
-    this.outputsByHeight = CacheHelper.create(999999);
-    this.difficultyByHeight = CacheHelper.create(999999);
-    this.minedByByHeight = CacheHelper.create(999999);
-    this.netHashByHeight = CacheHelper.create(999999);
+    this.subsidyByBlockHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.blocksByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.feeByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.outputsByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.difficultyByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.minedByByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.netHashByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
 
     /**
-     * 1h Cache
+     * 1h Cache: the blocks of the last hour
      */
-    this.minedByByHeight1h = CacheHelper.create(999999);
-    this.blocksByHeight1h = CacheHelper.create(999999);
+    this.minedByByHeight1h = CacheHelper.create(StatisticService.HOUR_CACHE_LIMIT);
+    this.blocksByHeight1h = CacheHelper.create(StatisticService.HOUR_CACHE_LIMIT);
 
 
 
@@ -77,6 +77,10 @@ function StatisticService(options) {
 }
 
 util.inherits(StatisticService, EventEmitter);
+
+// A day of 30-second blocks is 2,880 and an hour 120; the limits leave room for faster slots.
+StatisticService.DAY_CACHE_LIMIT = 4000;
+StatisticService.HOUR_CACHE_LIMIT = 200;
 
 /**
  *

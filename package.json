@@ -2,7 +2,7 @@
   "name": "@runonflux/insight-api",
   "description": "A Flux blockchain REST and web socket API service for flux-bitcore Node.",
   "version": "2.0.0",
-  "repository": "https://github.com/runonflux/insight-api.git",
+  "repository": "https://github.com/RunOnFlux/insight-api.git",
   "contributors": [
     {
       "name": "Gustavo Cortez",
@@ -50,9 +50,9 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/runonflux/insight-api/issues"
+    "url": "https://github.com/RunOnFlux/insight-api/issues"
   },
-  "homepage": "https://github.com/runonflux/insight-api",
+  "homepage": "https://github.com/RunOnFlux/insight-api",
   "license": "MIT",
   "keywords": [
     "insight",

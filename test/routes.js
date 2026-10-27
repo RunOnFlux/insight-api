@@ -12,6 +12,8 @@ var bitcore = require('@runonflux/bitcore-lib');
 
 var blocks = require('./data/blocks.json');
 var expected = require('./data/routes.json');
+// /api/version answers package.json's version, which a release sets from its tag.
+var VERSION = JSON.stringify(require('../package.json').version);
 
 var POW_HASH = 'd7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f';
 var COINBASE_TXID = '748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260';
@@ -344,6 +346,9 @@ describe('HTTP routes', function() {
     it(name, function(done) {
       call(port, r, function(err, response) {
         should.not.exist(err);
+        if (r.path === '/api/version') {
+          response.body = response.body.replace(VERSION, '"<package.json version>"');
+        }
         if (process.env.RECORD_ROUTES) {
           expected[name] = response;
           return done();

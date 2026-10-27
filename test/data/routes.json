@@ -74,7 +74,7 @@
     "type": "application/json; charset=utf-8",
     "cors": "*",
     "rateLimit": "10800",
-    "body": "{\"version\":\"2.0.0\"}"
+    "body": "{\"version\":\"<package.json version>\"}"
   },
   "GET /api/circulation": {
     "status": 200,

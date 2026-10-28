@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 const Common = require('../lib/common');
-mongoose.Promise = global.Promise;
 function Db(node, config) {
     this.config = config;
     this.node = node;
     this.common = new Common({log: this.node.log});
 }
 
+/**
+ * Connects mongoose's default connection, which every model uses.
+ * @param {Function} cb - called with an error when the first connection fails
+ */
 Db.prototype.connect = function (cb) {
 
     var self = this,
@@ -14,20 +17,20 @@ Db.prototype.connect = function (cb) {
         userUrl = (configDB['user']) ? (configDB['user'] + ':' + configDB['password'] + '@') : '',
         url = 'mongodb://' + userUrl + configDB['host'] + ':' + configDB['port'] + '/' + configDB['database'];
 
-    return mongoose.connect(url, function (err) {
-
-        if (err) {
-            self.common.log.error('[DB] ', err);
-            return cb(err);
-        }
+    mongoose.connect(url).then(function () {
 
         self.common.log.info('[DB] Connected');
 
-        return cb();
+        return process.nextTick(cb);
+
+    }, function (err) {
+
+        self.common.log.error('[DB] ', err);
+
+        return process.nextTick(cb, err);
 
     });
 
 };
 
 module.exports = Db;
-

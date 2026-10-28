@@ -1,0 +1,562 @@
+{
+  "GET /api/sync": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"status\":\"finished\",\"blockChainHeight\":1000118,\"syncPercentage\":100,\"height\":1000118,\"error\":null,\"type\":\"bitcore node\"}"
+  },
+  "GET /api/status": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"info\":{\"version\":9000000,\"protocolversion\":170020,\"blocks\":1000118,\"timeoffset\":0,\"connections\":8,\"proxy\":\"\",\"difficulty\":12345.6,\"testnet\":false,\"relayfee\":0.000001,\"errors\":\"\",\"network\":\"livenet\",\"reward\":75}}"
+  },
+  "GET /api/status?q=getDifficulty": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"difficulty\":12345.6}"
+  },
+  "GET /api/status?q=getBestBlockHash": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"bestblockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\"}"
+  },
+  "GET /api/status?q=getLastBlockHash": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"syncTipHash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"lastblockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\"}"
+  },
+  "GET /api/status?q=getMiningInfo": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"miningInfo\":{\"difficulty\":12345.6,\"networkhashps\":987654}}"
+  },
+  "GET /api/status?q=getPeerInfo": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"peerInfo\":[]}"
+  },
+  "GET /api/status?q=getFluxNodes": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"fluxNodes\":[{\"collateral\":\"COutPoint(bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, 0)\",\"txhash\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outidx\":\"0\",\"ip\":\"10.0.0.1:16125\",\"tier\":\"CUMULUS\",\"payment_address\":\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"},{\"collateral\":\"COutPoint(cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc, 1)\",\"txhash\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"outidx\":\"1\",\"ip\":\"10.0.0.2\",\"tier\":\"STRATUS\",\"payment_address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"}]}"
+  },
+  "GET /api/status?q=getZelNodes": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"zelNodes\":[{\"collateral\":\"COutPoint(bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, 0)\",\"txhash\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outidx\":\"0\",\"ip\":\"10.0.0.1:16125\",\"tier\":\"CUMULUS\",\"payment_address\":\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"},{\"collateral\":\"COutPoint(cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc, 1)\",\"txhash\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"outidx\":\"1\",\"ip\":\"10.0.0.2\",\"tier\":\"STRATUS\",\"payment_address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"}]}"
+  },
+  "GET /api/peer": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"connected\":true,\"host\":\"127.0.0.1\",\"port\":null}"
+  },
+  "GET /api/version": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"version\":\"<package.json version>\"}"
+  },
+  "GET /api/circulation": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"circulationsupply\":226396579.7495742,\"circsupplyint\":226396580,\"circsupplydig\":\"226396579.74957421\"}"
+  },
+  "GET /api/addr/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"addrStr\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"balance\":56.25,\"balanceSat\":5625000000,\"totalReceived\":56.25,\"totalReceivedSat\":5625000000,\"totalSent\":0,\"totalSentSat\":0,\"unconfirmedBalance\":0,\"unconfirmedBalanceSat\":0,\"unconfirmedTxApperances\":0,\"txApperances\":1,\"transactions\":[\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\"]}"
+  },
+  "GET /api/addr/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou?noTxList=1&from=0&to=5": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"addrStr\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"balance\":56.25,\"balanceSat\":5625000000,\"totalReceived\":56.25,\"totalReceivedSat\":5625000000,\"totalSent\":0,\"totalSentSat\":0,\"unconfirmedBalance\":0,\"unconfirmedBalanceSat\":0,\"unconfirmedTxApperances\":0,\"txApperances\":1,\"transactions\":[\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\"]}"
+  },
+  "GET /api/addr/notanaddress": {
+    "status": 400,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Invalid address: Checksum mismatch. Code:1"
+  },
+  "GET /api/addr/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou/utxo": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"vout\":0,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":56.25,\"satoshis\":5625000000,\"height\":1000000,\"confirmations\":119,\"ts\":1600000000},{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef\",\"vout\":1,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":10000,\"satoshis\":1000000000000,\"height\":900000,\"confirmations\":100119,\"ts\":1500000000}]"
+  },
+  "GET /api/addr/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou/balance": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "5625000000"
+  },
+  "GET /api/addr/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou/totalReceived": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "5625000000"
+  },
+  "GET /api/addr/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou/totalSent": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "0"
+  },
+  "GET /api/addr/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou/unconfirmedBalance": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "0"
+  },
+  "GET /api/addrs/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou,t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj/utxo": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"vout\":0,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":56.25,\"satoshis\":5625000000,\"height\":1000000,\"confirmations\":119,\"ts\":1600000000},{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef\",\"vout\":1,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":10000,\"satoshis\":1000000000000,\"height\":900000,\"confirmations\":100119,\"ts\":1500000000}]"
+  },
+  "GET /api/addrs/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou,t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj/unspent": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"vout\":0,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":56.25,\"satoshis\":5625000000,\"height\":1000000,\"confirmations\":119,\"ts\":1600000000},{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef\",\"vout\":1,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":10000,\"satoshis\":1000000000000,\"height\":900000,\"confirmations\":100119,\"ts\":1500000000}]"
+  },
+  "GET /api/addrs/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou/txs?from=0&to=5": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"totalItems\":1,\"from\":0,\"to\":1,\"items\":[{\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"version\":1,\"locktime\":0,\"blockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"blockheight\":1000000,\"confirmations\":119,\"size\":123,\"time\":1600000000,\"blocktime\":1600000000,\"vin\":[{\"coinbase\":\"0340420f\",\"sequence\":4294967295,\"n\":0}],\"vout\":[{\"value\":\"56.25000000\",\"n\":0,\"scriptPubKey\":{\"hex\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"asm\":\"OP_DUP OP_HASH160 572f9a21ca67e770836a7fd815e70301bd7494d1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"],\"type\":\"pubkeyhash\"},\"spentTxId\":null,\"spentIndex\":null,\"spentHeight\":null},{\"value\":\"18.75000000\",\"n\":1,\"scriptPubKey\":{\"hex\":\"76a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac\",\"asm\":\"OP_DUP OP_HASH160 10a0e70cd91a45e0e6e409e227ab285bd61592b1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"],\"type\":\"pubkeyhash\"},\"spentTxId\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"spentIndex\":0,\"spentHeight\":1000005}],\"isCoinBase\":true,\"valueOut\":75}]}"
+  },
+  "GET /api/addrs/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou,t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj/balance": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"unconfirmedBalance\":0,\"balance\":5625000000,\"immature\":0}"
+  },
+  "POST /api/addrs/utxo form addrs=t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"vout\":0,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":56.25,\"satoshis\":5625000000,\"height\":1000000,\"confirmations\":119,\"ts\":1600000000},{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef\",\"vout\":1,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":10000,\"satoshis\":1000000000000,\"height\":900000,\"confirmations\":100119,\"ts\":1500000000}]"
+  },
+  "POST /api/addrs/utxo json {\"addrs\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou,t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"}": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"vout\":0,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":56.25,\"satoshis\":5625000000,\"height\":1000000,\"confirmations\":119,\"ts\":1600000000},{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef\",\"vout\":1,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":10000,\"satoshis\":1000000000000,\"height\":900000,\"confirmations\":100119,\"ts\":1500000000}]"
+  },
+  "POST /api/addrs/txs json {\"addrs\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"from\":0,\"to\":2}": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"totalItems\":1,\"from\":0,\"to\":1,\"items\":[{\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"version\":1,\"locktime\":0,\"blockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"blockheight\":1000000,\"confirmations\":119,\"size\":123,\"time\":1600000000,\"blocktime\":1600000000,\"vin\":[{\"coinbase\":\"0340420f\",\"sequence\":4294967295,\"n\":0}],\"vout\":[{\"value\":\"56.25000000\",\"n\":0,\"scriptPubKey\":{\"hex\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"asm\":\"OP_DUP OP_HASH160 572f9a21ca67e770836a7fd815e70301bd7494d1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"],\"type\":\"pubkeyhash\"},\"spentTxId\":null,\"spentIndex\":null,\"spentHeight\":null},{\"value\":\"18.75000000\",\"n\":1,\"scriptPubKey\":{\"hex\":\"76a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac\",\"asm\":\"OP_DUP OP_HASH160 10a0e70cd91a45e0e6e409e227ab285bd61592b1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"],\"type\":\"pubkeyhash\"},\"spentTxId\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"spentIndex\":0,\"spentHeight\":1000005}],\"isCoinBase\":true,\"valueOut\":75}]}"
+  },
+  "POST /api/addrs/txs form addrs=t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou&noAsm=1": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"totalItems\":1,\"from\":0,\"to\":1,\"items\":[{\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"version\":1,\"locktime\":0,\"blockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"blockheight\":1000000,\"confirmations\":119,\"size\":123,\"time\":1600000000,\"blocktime\":1600000000,\"vin\":[{\"coinbase\":\"0340420f\",\"sequence\":4294967295,\"n\":0}],\"vout\":[{\"value\":\"56.25000000\",\"n\":0,\"scriptPubKey\":{\"hex\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"asm\":\"OP_DUP OP_HASH160 572f9a21ca67e770836a7fd815e70301bd7494d1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"],\"type\":\"pubkeyhash\"},\"spentTxId\":null,\"spentIndex\":null,\"spentHeight\":null},{\"value\":\"18.75000000\",\"n\":1,\"scriptPubKey\":{\"hex\":\"76a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac\",\"asm\":\"OP_DUP OP_HASH160 10a0e70cd91a45e0e6e409e227ab285bd61592b1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"],\"type\":\"pubkeyhash\"},\"spentTxId\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"spentIndex\":0,\"spentHeight\":1000005}],\"isCoinBase\":true,\"valueOut\":75}]}"
+  },
+  "GET /api/tx/748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"version\":1,\"locktime\":0,\"blockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"blockheight\":1000000,\"confirmations\":119,\"size\":123,\"time\":1600000000,\"blocktime\":1600000000,\"vin\":[{\"coinbase\":\"0340420f\",\"sequence\":4294967295,\"n\":0}],\"vout\":[{\"value\":\"56.25000000\",\"n\":0,\"scriptPubKey\":{\"hex\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"asm\":\"OP_DUP OP_HASH160 572f9a21ca67e770836a7fd815e70301bd7494d1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"],\"type\":\"pubkeyhash\"},\"spentTxId\":null,\"spentIndex\":null,\"spentHeight\":null},{\"value\":\"18.75000000\",\"n\":1,\"scriptPubKey\":{\"hex\":\"76a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac\",\"asm\":\"OP_DUP OP_HASH160 10a0e70cd91a45e0e6e409e227ab285bd61592b1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"],\"type\":\"pubkeyhash\"},\"spentTxId\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"spentIndex\":0,\"spentHeight\":1000005}],\"isCoinBase\":true,\"valueOut\":75}"
+  },
+  "GET /api/tx/abababababababababababababababababababababababababababababababab": {
+    "status": 404,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Not found"
+  },
+  "GET /api/rawtx/748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"rawtx\":\"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff040340420fffffffff0240b0464f010000001976a914572f9a21ca67e770836a7fd815e70301bd7494d188acc03ac26f000000001976a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac00000000\"}"
+  },
+  "GET /api/rawtx/abababababababababababababababababababababababababababababababab": {
+    "status": 404,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Not found"
+  },
+  "GET /api/txs?address=t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"pagesTotal\":1,\"txs\":[{\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"version\":1,\"locktime\":0,\"blockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"blockheight\":1000000,\"confirmations\":119,\"size\":123,\"time\":1600000000,\"blocktime\":1600000000,\"vin\":[{\"coinbase\":\"0340420f\",\"sequence\":4294967295,\"n\":0}],\"vout\":[{\"value\":\"56.25000000\",\"n\":0,\"scriptPubKey\":{\"hex\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"asm\":\"OP_DUP OP_HASH160 572f9a21ca67e770836a7fd815e70301bd7494d1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"],\"type\":\"pubkeyhash\"},\"spentTxId\":null,\"spentIndex\":null,\"spentHeight\":null},{\"value\":\"18.75000000\",\"n\":1,\"scriptPubKey\":{\"hex\":\"76a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac\",\"asm\":\"OP_DUP OP_HASH160 10a0e70cd91a45e0e6e409e227ab285bd61592b1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"],\"type\":\"pubkeyhash\"},\"spentTxId\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"spentIndex\":0,\"spentHeight\":1000005}],\"isCoinBase\":true,\"valueOut\":75}]}"
+  },
+  "GET /api/txs?block=d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"pagesTotal\":1,\"txs\":[{\"txid\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"version\":1,\"locktime\":0,\"blockhash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"blockheight\":1000000,\"confirmations\":119,\"size\":123,\"time\":1600000000,\"blocktime\":1600000000,\"vin\":[{\"coinbase\":\"0340420f\",\"sequence\":4294967295,\"n\":0}],\"vout\":[{\"value\":\"56.25000000\",\"n\":0,\"scriptPubKey\":{\"hex\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"asm\":\"OP_DUP OP_HASH160 572f9a21ca67e770836a7fd815e70301bd7494d1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"],\"type\":\"pubkeyhash\"},\"spentTxId\":null,\"spentIndex\":null,\"spentHeight\":null},{\"value\":\"18.75000000\",\"n\":1,\"scriptPubKey\":{\"hex\":\"76a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac\",\"asm\":\"OP_DUP OP_HASH160 10a0e70cd91a45e0e6e409e227ab285bd61592b1 OP_EQUALVERIFY OP_CHECKSIG\",\"addresses\":[\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"],\"type\":\"pubkeyhash\"},\"spentTxId\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"spentIndex\":0,\"spentHeight\":1000005}],\"isCoinBase\":true,\"valueOut\":75}]}"
+  },
+  "GET /api/txs": {
+    "status": 503,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Block hash or address expected"
+  },
+  "POST /api/tx/send json {\"rawtx\":\"0100\"}": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"txid\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"}"
+  },
+  "POST /api/tx/send form rawtx=0100&allowAbsurdFees=true": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"txid\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"}"
+  },
+  "POST /api/tx/send json {\"rawtx\":\"bad\"}": {
+    "status": 400,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "TX decode failed. Code:-22"
+  },
+  "GET /api/block/d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"hash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"size\":317,\"height\":1000000,\"version\":4,\"merkleroot\":\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\",\"tx\":[\"748e976f86ce4e9fff928cc1465bf91209989efc8602f0777968c153cba1f260\"],\"time\":1600000000,\"bits\":\"1c0cf267\",\"difficulty\":10366777.85869671,\"chainwork\":\"00ff\",\"confirmations\":119,\"previousblockhash\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"nextblockhash\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\"reward\":75,\"isMainChain\":true,\"minedBy\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"poolInfo\":{\"poolName\":\"CoinBlockers\",\"url\":\"https://zel.coinblockers.com/\"},\"isPON\":false,\"blockType\":\"Proof of Work\",\"nonce\":\"2222222222222222222222222222222222222222222222222222222222222222\",\"solution\":\"33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333\"}"
+  },
+  "GET /api/block/abababababababababababababababababababababababababababababababab": {
+    "status": 404,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Not found"
+  },
+  "GET /api/block/abcd": {
+    "status": 404,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Not found"
+  },
+  "GET /api/rawblock/d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"rawblock\":\"04000000111111111111111111111111111111111111111111111111111111111111111160f2a1cb53c1687977f00286fc9e980912f95b46c18c92ff9f4ece866f978e74000000000000000000000000000000000000000000000000000000000000000000105e5f67f20c1c222222222222222222222222222222222222222222222222222222222222222234333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333330101000000010000000000000000000000000000000000000000000000000000000000000000ffffffff040340420fffffffff0240b0464f010000001976a914572f9a21ca67e770836a7fd815e70301bd7494d188acc03ac26f000000001976a91410a0e70cd91a45e0e6e409e227ab285bd61592b188ac00000000\"}"
+  },
+  "GET /api/block-index/1000000": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"blockHash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\"}"
+  },
+  "GET /api/blocks?blockDate=2020-09-13&limit=5": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"blocks\":[{\"height\":1000000,\"size\":317,\"hash\":\"d7a01346a72e4145813c71eccba5cf26f6814d4294357362103c4df4f41ac90f\",\"time\":1600000000,\"difficulty\":10366777.85869671,\"txlength\":1,\"poolInfo\":{\"poolName\":\"CoinBlockers\",\"url\":\"https://zel.coinblockers.com/\"},\"isMainChain\":true,\"minedBy\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"}],\"length\":1,\"pagination\":{\"next\":\"2020-09-14\",\"prev\":\"2020-09-12\",\"currentTs\":1600041599,\"current\":\"2020-09-13\",\"isToday\":false,\"more\":false}}"
+  },
+  "GET /api/blocks?blockDate=13-09-2020": {
+    "status": 503,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Please use yyyy-mm-dd format"
+  },
+  "GET /api/supply": {
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "226396579.7495742"
+  },
+  "GET /api/total-supply": {
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "226396579.7495742"
+  },
+  "GET /api/circulating-supply": {
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "226396579.7495742"
+  },
+  "GET /api/statistics/total-supply": {
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "226396579.7495742"
+  },
+  "GET /api/statistics/circulating-supply?format=object": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"circulatingSupply\":\"226396579.7495742\"}"
+  },
+  "GET /api/statistics/main-chain-circulating-locked": {
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "322992600"
+  },
+  "GET /api/statistics/supply?days=7": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"date\":\"2020-09-13\",\"sum\":\"397478750\"}]"
+  },
+  "GET /api/statistics/fees": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"date\":\"2020-09-13\",\"fee\":\"0.00000003\"}]"
+  },
+  "GET /api/statistics/network-hash": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"date\":\"2020-09-13\",\"sum\":100}]"
+  },
+  "GET /api/statistics/pools?date=2020-09-13": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"date\":\"2020-09-13\",\"n_blocks_mined\":3,\"blocks_by_pool\":[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"poolName\":\"CoinBlockers\",\"url\":\"https://zel.coinblockers.com/\",\"blocks_found\":2,\"percent_total\":\"66.67\"},{\"address\":\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\",\"poolName\":\"Unknown\",\"url\":\"\",\"blocks_found\":1,\"percent_total\":\"33.33\"}],\"pagination\":{\"next\":\"2020-09-14\",\"prev\":\"2020-09-12\",\"currentTs\":1600041599,\"current\":\"2020-09-13\",\"isToday\":false}}"
+  },
+  "GET /api/statistics/pools?date=2020-9-13x": {
+    "status": 503,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Please use yyyy-mm-dd format"
+  },
+  "GET /api/statistics/pools-last-hour": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"n_blocks_mined\":0,\"blocks_by_pool\":[]}"
+  },
+  "GET /api/statistics/transactions?days=all": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"date\":\"2020-09-13\",\"transaction_count\":42,\"block_count\":3}]"
+  },
+  "GET /api/statistics/outputs": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"date\":\"2020-09-13\",\"sum\":\"1.23456789\"}]"
+  },
+  "GET /api/statistics/difficulty": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"date\":\"2020-09-13\",\"sum\":\"20\"}]"
+  },
+  "GET /api/statistics/total": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"n_blocks_mined\":0,\"time_between_blocks\":0,\"mined_currency_amount\":0,\"transaction_fees\":0,\"number_of_transactions\":0,\"outputs_volume\":0,\"network_hash_ps\":0,\"blocks_by_pool\":[]}"
+  },
+  "GET /api/statistics/balance-intervals": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"max\":0.001,\"min\":0,\"count\":0,\"sum\":0}]"
+  },
+  "GET /api/statistics/richer-than": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"amount_usd\":1,\"count_addresses\":10}]"
+  },
+  "GET /api/statistics/richest-addresses-list": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"blocks_mined\":3,\"balance\":56.25}]"
+  },
+  "GET /api/statistics/active-addresses": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"date\":\"2020-09-13\",\"count\":2}]"
+  },
+  "GET /api/messages/verify": {
+    "status": 400,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Missing parameters (expected \"address\", \"signature\" and \"message\"). Code:1"
+  },
+  "POST /api/messages/verify form address=t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou&signature=abc&message=hi": {
+    "status": 400,
+    "type": "text/html; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "Unexpected error: Invalid Argument: Error: i must be 0, 1, 2, or 3. Code:1"
+  },
+  "GET /api/utils/estimatefee?nbBlocks=2,6": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"2\":0.0002,\"6\":0.0006}"
+  },
+  "GET /api/zelnode/listfluxnodes": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"result\":[{\"collateral\":\"COutPoint(bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, 0)\",\"txhash\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outidx\":\"0\",\"ip\":\"10.0.0.1:16125\",\"tier\":\"CUMULUS\",\"payment_address\":\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"},{\"collateral\":\"COutPoint(cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc, 1)\",\"txhash\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"outidx\":\"1\",\"ip\":\"10.0.0.2\",\"tier\":\"STRATUS\",\"payment_address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"}],\"error\":null,\"id\":7}"
+  },
+  "GET /api/fluxnode/listfluxnodes/10.0.0.1:16125": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"result\":[{\"collateral\":\"COutPoint(bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, 0)\",\"txhash\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outidx\":\"0\",\"ip\":\"10.0.0.1:16125\",\"tier\":\"CUMULUS\",\"payment_address\":\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"}],\"error\":null,\"id\":7}"
+  },
+  "GET /api/fluxnode/listfluxnodes/cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc-1": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"result\":[{\"collateral\":\"COutPoint(cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc, 1)\",\"txhash\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"outidx\":\"1\",\"ip\":\"10.0.0.2\",\"tier\":\"STRATUS\",\"payment_address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"}],\"error\":null,\"id\":7}"
+  },
+  "POST /api/fluxnode/listfluxnodes json {\"filter\":\"STRATUS,bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-0\"}": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"result\":[{\"collateral\":\"COutPoint(cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc, 1)\",\"txhash\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"outidx\":\"1\",\"ip\":\"10.0.0.2\",\"tier\":\"STRATUS\",\"payment_address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"},{\"collateral\":\"COutPoint(bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, 0)\",\"txhash\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outidx\":\"0\",\"ip\":\"10.0.0.1:16125\",\"tier\":\"CUMULUS\",\"payment_address\":\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"}],\"error\":null,\"id\":7}"
+  },
+  "GET /api/fluxnode/listfluxnodes?filter=CUMULUS": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"result\":[{\"collateral\":\"COutPoint(bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, 0)\",\"txhash\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"outidx\":\"0\",\"ip\":\"10.0.0.1:16125\",\"tier\":\"CUMULUS\",\"payment_address\":\"t1KPXa7J1vmugFm4X9XkjuL6iDFyLYjpQsj\"},{\"collateral\":\"COutPoint(cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc, 1)\",\"txhash\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"outidx\":\"1\",\"ip\":\"10.0.0.2\",\"tier\":\"STRATUS\",\"payment_address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\"}],\"error\":null,\"id\":7}"
+  },
+  "GET /api/fluxnode/addrs/t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou/utxo": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "[{\"address\":\"t1RpbpUWos9fNbAFPXy9fAm1jVqYYBUi1ou\",\"txid\":\"efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef\",\"vout\":1,\"scriptPubKey\":\"76a914572f9a21ca67e770836a7fd815e70301bd7494d188ac\",\"amount\":10000,\"satoshis\":1000000000000,\"height\":900000,\"confirmations\":100119,\"ts\":1500000000}]"
+  },
+  "GET /api/fluxnode/doslist": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"result\":[],\"error\":null,\"id\":8}"
+  },
+  "GET /api/fluxnode/startlist": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"result\":[],\"error\":null,\"id\":9}"
+  },
+  "GET /api/currency": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"status\":200,\"data\":{\"rate\":0.4321,\"short\":\"FLUX\"}}"
+  },
+  "GET /api/markets/info": {
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"price\":0.5,\"price_btc\":0.000005,\"market_cap_usd\":1,\"total_volume_24h\":2,\"delta_24h\":3}"
+  },
+  "GET /api/nothing/here": {
+    "status": 404,
+    "type": "application/json; charset=utf-8",
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": "{\"status\":404,\"url\":\"/api/nothing/here\",\"error\":\"Not found\"}"
+  },
+  "OPTIONS /api/sync": {
+    "status": 204,
+    "type": null,
+    "cors": "*",
+    "rateLimit": "10800",
+    "body": ""
+  }
+}

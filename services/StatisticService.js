@@ -1,9 +1,9 @@
 'use strict';
 
 var async = require('async');
-var bitcore = require('bitcore-lib');
+var bitcore = require('@runonflux/bitcore-lib');
 var BigNumber = require('bignumber.js');
-var LRU = require('lru-cache');
+var CacheHelper = require('../helpers/CacheHelper');
 var Common = require('../lib/common');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -28,29 +28,29 @@ function StatisticService(options) {
     this.txController = options.txController;
 
     /**
-     * 24h Cache
+     * 24h Cache: the blocks of the last day, each expiring as it leaves it
      */
-    this.subsidyByBlockHeight = LRU(999999);
-    this.blocksByHeight = LRU(999999);
-    this.feeByHeight = LRU(999999);
-    this.outputsByHeight = LRU(999999);
-    this.difficultyByHeight = LRU(999999);
-    this.minedByByHeight = LRU(999999);
-    this.netHashByHeight = LRU(999999);
+    this.subsidyByBlockHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.blocksByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.feeByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.outputsByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.difficultyByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.minedByByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
+    this.netHashByHeight = CacheHelper.create(StatisticService.DAY_CACHE_LIMIT);
 
     /**
-     * 1h Cache
+     * 1h Cache: the blocks of the last hour
      */
-    this.minedByByHeight1h = LRU(999999);
-    this.blocksByHeight1h = LRU(999999);
+    this.minedByByHeight1h = CacheHelper.create(StatisticService.HOUR_CACHE_LIMIT);
+    this.blocksByHeight1h = CacheHelper.create(StatisticService.HOUR_CACHE_LIMIT);
 
 
 
     /**
      * Statistic Cache By Days
      */
-    this.statisticByDays = LRU(999999999);
-    this.knownBlocks = LRU(999999999);
+    this.statisticByDays = CacheHelper.create(999999999);
+    this.knownBlocks = CacheHelper.create(999999999);
 
     this.lastCheckedBlock = 0;
 
@@ -77,6 +77,10 @@ function StatisticService(options) {
 }
 
 util.inherits(StatisticService, EventEmitter);
+
+// A day of 30-second blocks is 2,880 and an hour 120; the limits leave room for faster slots.
+StatisticService.DAY_CACHE_LIMIT = 4000;
+StatisticService.HOUR_CACHE_LIMIT = 200;
 
 /**
  *
@@ -176,19 +180,19 @@ StatisticService.prototype.process24hBlock = function (data, next) {
         maxAge = (block.time - minTimestamp) * 1000;
 
     if (maxAge > 0) {
-        self.blocksByHeight.set(block.height, block, maxAge);
-        self.subsidyByBlockHeight.set(block.height, subsidy, maxAge);
-        self.feeByHeight.set(block.height, fee, maxAge);
-        self.outputsByHeight.set(block.height, totalOutputs, maxAge);
-        self.difficultyByHeight.set(block.height, difficulty, maxAge);
-        self.minedByByHeight.set(block.height, minedBy, maxAge);
-        self.netHashByHeight.set(block.height, netHash, maxAge);
+        self.blocksByHeight.set(block.height, block, {ttl: maxAge});
+        self.subsidyByBlockHeight.set(block.height, subsidy, {ttl: maxAge});
+        self.feeByHeight.set(block.height, fee, {ttl: maxAge});
+        self.outputsByHeight.set(block.height, totalOutputs, {ttl: maxAge});
+        self.difficultyByHeight.set(block.height, difficulty, {ttl: maxAge});
+        self.minedByByHeight.set(block.height, minedBy, {ttl: maxAge});
+        self.netHashByHeight.set(block.height, netHash, {ttl: maxAge});
     }
     var minTimestampHour = currentDateHour.getTime() / 1000,
         maxAgeHour = (block.time - minTimestampHour) * 1000;
     if (maxAgeHour > 0) {
-        self.blocksByHeight1h.set(block.height, block, maxAgeHour);
-        self.minedByByHeight1h.set(block.height, minedBy, maxAgeHour);
+        self.blocksByHeight1h.set(block.height, block, {ttl: maxAgeHour});
+        self.minedByByHeight1h.set(block.height, minedBy, {ttl: maxAgeHour});
     }
     return next();
 
@@ -207,7 +211,7 @@ StatisticService.prototype.processPrevBlocks = function (height, next) {
             blockJson: null
         };
 
-    return async.doDuring(
+    return async.doWhilst(
         function (callback) {
 
             return self.node.getJsonBlock(height, function (err, blockJson) {
@@ -625,7 +629,7 @@ StatisticService.prototype.updateOrCreateDay = function (date, data, next) {
         }
 
 
-        dayBN.supply.sum = SupplyHelper.getCirculatingSupplyByHeight(block.height).mul(1e8);
+        dayBN.supply.sum = SupplyHelper.getCirculatingSupplyByHeight(block.height).times(1e8);
 
         data.block.transactions.forEach(function (txNotTransformed) {
             var tx = self.txController.transformFluxChainTransaction(txNotTransformed);

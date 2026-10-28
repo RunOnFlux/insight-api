@@ -2,14 +2,23 @@
 var sinon = require('sinon');
 var should = require('should');
 var AddressController = require('../lib/addresses');
-var _ = require('lodash');
-var bitcore = require('bitcore-lib');
+var TxController = require('../lib/transactions');
+var TransactionService = require('../services/TransactionService');
+
+// The JSON a client receives for a response body.
+function wire(data) {
+  return JSON.parse(JSON.stringify(data));
+}
+
+function txControllerFor(node) {
+  return new TxController({node: node, transactionService: new TransactionService({node: node})});
+}
 
 var txinfos = {
   totalCount: 2,
   items: [
     {
-      'address': 'mkPvAKZ2rar6qeG3KjBtJHHMSP1wFZH7Er',
+      'address': 'tmEbKCSNbQYhwoR2mDKLNTqqhS2h8dPfWbK',
       'satoshis': 2782729129,
       'height': 534105,
       'confirmations': 123,
@@ -49,7 +58,7 @@ var txinfos = {
       }
     },
     {
-      'address': 'mkPvAKZ2rar6qeG3KjBtJHHMSP1wFZH7Er',
+      'address': 'tmEbKCSNbQYhwoR2mDKLNTqqhS2h8dPfWbK',
       'satoshis': -2782729129,
       'height': 534110,
       'confirmations': 118,
@@ -103,7 +112,7 @@ var tx = {
   feeSatoshis: 10000,
   inputs: [
     {
-      address: 'moFfnRwt77pApKnnU6m5uocFaa43aAYpt5',
+      address: 'tmHT4pYmSf5g1n6ZWMgua5NAbaDjF2gfmPn',
       prevTxId: 'ea97726ffc529808094ae5568342267931a058375a20147535a0d095837079f3',
       outputIndex: 1,
       sequence: 4294967295,
@@ -112,7 +121,7 @@ var tx = {
       satoshis: 53540000,
     },
     {
-      address: 'n1XJBAyU4hNR4xRtY3UxnmAteoJX83p5qv',
+      address: 'tmVihDHo2cfEG2jCcRddSxKjEeSyiYjBVKx',
       prevTxId: '980a9cc2dbc2d3464eb9900ae6d579a03045408563320f62d99316c3d4ff58b7',
       outputIndex: 2,
       sequence: 4294967295,
@@ -126,16 +135,16 @@ var tx = {
       satoshis: 220000,
       script: '76a914b9bbd76588d9e4e09f0369a9aa0b2749a11c4e8d88ac',
       scriptAsm: 'OP_DUP OP_HASH160 b9bbd76588d9e4e09f0369a9aa0b2749a11c4e8d OP_EQUALVERIFY OP_CHECKSIG',
-      address: 'mxT2KzTUQvsaYYothDtjcdvyAdaHA9ofMp'
+      address: 'tmSeRN7H2xtjRWKacap3DnCVKAHFUUQKNXQ'
     },
     {
       satoshis: 53320000,
-      address: 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK',
+      address: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL',
       script: '76a914d2ec20bb8e5f25a52f730384b803d95683250e0b88ac',
       scriptAsm: 'OP_DUP OP_HASH160 d2ec20bb8e5f25a52f730384b803d95683250e0b OP_EQUALVERIFY OP_CHECKSIG'
     },
     {
-      address: 'moZY18rGNmh4YCPeugtGW46AkkWMQttBUD',
+      address: 'tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb',
       satoshis: 289829,
       script: '76a914583df9fa56ad961051e00ca93e68dfaf1eab9ec588ac',
       scriptAsm: 'OP_DUP OP_HASH160 583df9fa56ad961051e00ca93e68dfaf1eab9ec5 OP_EQUALVERIFY OP_CHECKSIG'
@@ -155,7 +164,7 @@ var txinfos2 = {
 
 var utxos = [
   {
-    'address': 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK',
+    'address': 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL',
     'txid': '63b68becb0e514b32317f4b29a5cf0627d4087e54ac17f686fcb1d9a27680f73',
     'outputIndex': 1,
     'timestamp': 1441116143,
@@ -165,7 +174,7 @@ var utxos = [
     'confirmations': 50
   },
   {
-    'address': 'moZY18rGNmh4YCPeugtGW46AkkWMQttBUD',
+    'address': 'tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb',
     'txid': '63b68becb0e514b32317f4b29a5cf0627d4087e54ac17f686fcb1d9a27680f73',
     'outputIndex': 2,
     'timestamp': 1441116143,
@@ -194,15 +203,15 @@ describe('Addresses', function() {
       getAddressSummary: sinon.stub().callsArgWith(2, null, summary)
     };
 
-    var addresses = new AddressController(node);
+    var addresses = new AddressController({node: node});
     var req = {
-      addr: 'mkPvAKZ2rar6qeG3KjBtJHHMSP1wFZH7Er',
+      addr: 'tmEbKCSNbQYhwoR2mDKLNTqqhS2h8dPfWbK',
       query: {}
     };
 
     it('should have correct data', function(done) {
       var insight = {
-        'addrStr': 'mkPvAKZ2rar6qeG3KjBtJHHMSP1wFZH7Er',
+        'addrStr': 'tmEbKCSNbQYhwoR2mDKLNTqqhS2h8dPfWbK',
         'balance': 0,
         'balanceSat': 0,
         'totalReceived': 27.82729129,
@@ -232,13 +241,13 @@ describe('Addresses', function() {
       var testnode = {};
       testnode.log = {};
       testnode.log.error = sinon.stub();
-      var controller = new AddressController(testnode);
+      var controller = new AddressController({node: testnode});
       controller.getAddressSummary = sinon.stub().callsArgWith(2, new Error('test'));
       var req = {
         query: {
           noTxList: 1
         },
-        addr: 'mkPvAKZ2rar6qeG3KjBtJHHMSP1wFZH7Er'
+        addr: 'tmEbKCSNbQYhwoR2mDKLNTqqhS2h8dPfWbK'
       };
       var send = sinon.stub();
       var status = sinon.stub().returns({send: send});
@@ -308,7 +317,7 @@ describe('Addresses', function() {
     it('should have correct data', function(done) {
       var insight = [
         {
-          'address': 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK',
+          'address': 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL',
           'txid': '63b68becb0e514b32317f4b29a5cf0627d4087e54ac17f686fcb1d9a27680f73',
           'vout': 1,
           'ts': 1441116143,
@@ -316,14 +325,7 @@ describe('Addresses', function() {
           'amount': 0.5332,
           'confirmations': 50,
           'height': 534181,
-          'satoshis': 53320000,
-          'confirmationsFromCache': true
-        }
-      ];
-
-      var todos = [
-        {
-          confirmationsFromCache: true
+          'satoshis': 53320000
         }
       ];
 
@@ -333,24 +335,98 @@ describe('Addresses', function() {
             height: 534230
           }
         },
-        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxos.slice(0, 1))
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxos.slice(0, 1)),
+        getDetailedTransaction: sinon.stub().callsArgWith(1, null, tx)
       };
 
-      var addresses = new AddressController(node);
+      var addresses = new AddressController({node: node, txController: txControllerFor(node)});
 
       var req = {
-        addr: 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK'
+        addr: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL'
       };
 
       var res = {
         jsonp: function(data) {
-          var merged = _.merge(data, todos);
-          should(merged).eql(insight);
+          should(wire(data)).eql(insight);
           done();
         }
       };
 
       addresses.utxo(req, res);
+    });
+
+    it('will flag a coinbase output with fewer than 100 confirmations', function(done) {
+      var coinbaseTx = Object.assign({}, tx, {coinbase: true});
+      var node = {
+        services: {
+          bitcoind: {
+            height: 534230
+          }
+        },
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxos.slice(0, 1)),
+        getDetailedTransaction: sinon.stub().callsArgWith(1, null, coinbaseTx)
+      };
+      var addresses = new AddressController({node: node, txController: txControllerFor(node)});
+      var req = {
+        addr: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL'
+      };
+      var res = {
+        jsonp: function(data) {
+          data.length.should.equal(1);
+          data[0].coinbase.should.equal(true);
+          node.getDetailedTransaction.args[0][0].should.equal(utxos[0].txid);
+          done();
+        }
+      };
+      addresses.utxo(req, res);
+    });
+
+    it('will not look up the transaction of an output with 100 or more confirmations', function(done) {
+      var node = {
+        services: {
+          bitcoind: {
+            height: 534280
+          }
+        },
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxos.slice(0, 1)),
+        getDetailedTransaction: sinon.stub()
+      };
+      var addresses = new AddressController({node: node, txController: txControllerFor(node)});
+      var req = {
+        addr: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL'
+      };
+      var res = {
+        jsonp: function(data) {
+          data[0].should.eql({
+            address: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL',
+            txid: '63b68becb0e514b32317f4b29a5cf0627d4087e54ac17f686fcb1d9a27680f73',
+            vout: 1,
+            scriptPubKey: '76a914d2ec20bb8e5f25a52f730384b803d95683250e0b88ac',
+            amount: 0.5332,
+            satoshis: 53320000,
+            height: 534181,
+            confirmations: 100,
+            ts: 1441116143
+          });
+          node.getDetailedTransaction.callCount.should.equal(0);
+          done();
+        }
+      };
+      addresses.utxo(req, res);
+    });
+
+    it('will answer an empty list for an address without outputs', function(done) {
+      var node = {
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, [])
+      };
+      var addresses = new AddressController({node: node});
+      var res = {
+        jsonp: function(data) {
+          data.should.eql([]);
+          done();
+        }
+      };
+      addresses.utxo({addr: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL'}, res);
     });
   });
 
@@ -358,7 +434,7 @@ describe('Addresses', function() {
     it('should have the correct data', function(done) {
       var insight = [
         {
-          'address': 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK',
+          'address': 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL',
           'txid': '63b68becb0e514b32317f4b29a5cf0627d4087e54ac17f686fcb1d9a27680f73',
           'vout': 1,
           'ts': 1441116143,
@@ -366,11 +442,10 @@ describe('Addresses', function() {
           'amount': 0.5332,
           'height': 534181,
           'satoshis': 53320000,
-          'confirmations': 50,
-          'confirmationsFromCache': true
+          'confirmations': 50
         },
         {
-          'address': 'moZY18rGNmh4YCPeugtGW46AkkWMQttBUD',
+          'address': 'tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb',
           'txid': '63b68becb0e514b32317f4b29a5cf0627d4087e54ac17f686fcb1d9a27680f73',
           'vout': 2,
           'ts': 1441116143,
@@ -378,18 +453,10 @@ describe('Addresses', function() {
           'amount': 0.00289829,
           'height': 534181,
           'satoshis': 289829,
-          'confirmations': 50,
-          'confirmationsFromCache': true
+          'confirmations': 50
         }
       ];
 
-      var todos = [
-        {
-          confirmationsFromCache: true
-        }, {
-          confirmationsFromCache: true
-        }
-      ];
 
       var node = {
         services: {
@@ -397,19 +464,19 @@ describe('Addresses', function() {
             height: 534230
           }
         },
-        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxos)
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxos),
+        getDetailedTransaction: sinon.stub().callsArgWith(1, null, tx)
       };
 
-      var addresses = new AddressController(node);
+      var addresses = new AddressController({node: node, txController: txControllerFor(node)});
 
       var req = {
-        addrs: 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK,moZY18rGNmh4YCPeugtGW46AkkWMQttBUD'
+        addrs: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL,tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb'
       };
 
       var res = {
         jsonp: function(data) {
-          var merged = _.merge(data, todos);
-          should(merged).eql(insight);
+          should(wire(data)).eql(insight);
           done();
         }
       };
@@ -439,7 +506,7 @@ describe('Addresses', function() {
                 },
                 'sequence': 4294967295,
                 'n': 0,
-                'addr': 'moFfnRwt77pApKnnU6m5uocFaa43aAYpt5',
+                'addr': 'tmHT4pYmSf5g1n6ZWMgua5NAbaDjF2gfmPn',
                 'valueSat': 53540000,
                 'value': 0.5354,
                 'doubleSpentTxID': null
@@ -453,7 +520,7 @@ describe('Addresses', function() {
                 },
                 'sequence': 4294967295,
                 'n': 1,
-                'addr': 'n1XJBAyU4hNR4xRtY3UxnmAteoJX83p5qv',
+                'addr': 'tmVihDHo2cfEG2jCcRddSxKjEeSyiYjBVKx',
                 'valueSat': 299829,
                 'value': 0.00299829,
                 'doubleSpentTxID': null
@@ -466,10 +533,9 @@ describe('Addresses', function() {
                 'scriptPubKey': {
                   'asm': 'OP_DUP OP_HASH160 b9bbd76588d9e4e09f0369a9aa0b2749a11c4e8d OP_EQUALVERIFY OP_CHECKSIG',
                   'hex': '76a914b9bbd76588d9e4e09f0369a9aa0b2749a11c4e8d88ac',
-                  'reqSigs': 1,
                   'type': 'pubkeyhash',
                   'addresses': [
-                    'mxT2KzTUQvsaYYothDtjcdvyAdaHA9ofMp'
+                    'tmSeRN7H2xtjRWKacap3DnCVKAHFUUQKNXQ'
                   ]
                 },
                 'spentHeight': null,
@@ -482,10 +548,9 @@ describe('Addresses', function() {
                 'scriptPubKey': {
                   'asm': 'OP_DUP OP_HASH160 d2ec20bb8e5f25a52f730384b803d95683250e0b OP_EQUALVERIFY OP_CHECKSIG',
                   'hex': '76a914d2ec20bb8e5f25a52f730384b803d95683250e0b88ac',
-                  'reqSigs': 1,
                   'type': 'pubkeyhash',
                   'addresses': [
-                    'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK'
+                    'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL'
                   ],
                 },
                 'spentHeight': null,
@@ -498,10 +563,9 @@ describe('Addresses', function() {
                 'scriptPubKey': {
                   'asm': 'OP_DUP OP_HASH160 583df9fa56ad961051e00ca93e68dfaf1eab9ec5 OP_EQUALVERIFY OP_CHECKSIG',
                   'hex': '76a914583df9fa56ad961051e00ca93e68dfaf1eab9ec588ac',
-                  'reqSigs': 1,
                   'type': 'pubkeyhash',
                   'addresses': [
-                    'moZY18rGNmh4YCPeugtGW46AkkWMQttBUD'
+                    'tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb'
                   ]
                 },
                 'spentHeight': null,
@@ -517,36 +581,11 @@ describe('Addresses', function() {
             'valueOut': 0.53829829,
             'size': 470,
             'valueIn': 0.53839829,
-            'fees': 0.0001,
-            'firstSeenTs': 1441108193
+            'fees': 0.0001
           }
         ]
       };
 
-      var todos = {
-        'items': [
-          {
-            'vout': [
-              {
-                'scriptPubKey': {
-                  'reqSigs': 1,
-                }
-              },
-              {
-                'scriptPubKey': {
-                  'reqSigs': 1,
-                }
-              },
-              {
-                'scriptPubKey': {
-                  'reqSigs': 1,
-                }
-              }
-            ],
-            'firstSeenTs': 1441108193
-          }
-        ]
-      };
 
       var node = {
         getAddressHistory: sinon.stub().callsArgWith(2, null, txinfos2),
@@ -558,18 +597,17 @@ describe('Addresses', function() {
         network: 'testnet'
       };
 
-      var addresses = new AddressController(node);
+      var addresses = new AddressController({node: node, txController: txControllerFor(node)});
 
       var req = {
-        addrs: 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK,moZY18rGNmh4YCPeugtGW46AkkWMQttBUD',
+        addrs: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL,tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb',
         query: {},
         body: {}
       };
 
       var res = {
         jsonp: function(data) {
-          var merged = _.merge(data, todos);
-          should(merged).eql(insight);
+          should(wire(data)).eql(insight);
           done();
         }
       };
@@ -592,7 +630,7 @@ describe('Addresses', function() {
                 'vout': 1,
                 'sequence': 4294967295,
                 'n': 0,
-                'addr': 'moFfnRwt77pApKnnU6m5uocFaa43aAYpt5',
+                'addr': 'tmHT4pYmSf5g1n6ZWMgua5NAbaDjF2gfmPn',
                 'valueSat': 53540000,
                 'value': 0.5354,
                 'doubleSpentTxID': null
@@ -602,7 +640,7 @@ describe('Addresses', function() {
                 'vout': 2,
                 'sequence': 4294967295,
                 'n': 1,
-                'addr': 'n1XJBAyU4hNR4xRtY3UxnmAteoJX83p5qv',
+                'addr': 'tmVihDHo2cfEG2jCcRddSxKjEeSyiYjBVKx',
                 'valueSat': 299829,
                 'value': 0.00299829,
                 'doubleSpentTxID': null
@@ -614,10 +652,9 @@ describe('Addresses', function() {
                 'n': 0,
                 'scriptPubKey': {
                   'hex': '76a914b9bbd76588d9e4e09f0369a9aa0b2749a11c4e8d88ac',
-                  'reqSigs': 1,
                   'type': 'pubkeyhash',
                   'addresses': [
-                    'mxT2KzTUQvsaYYothDtjcdvyAdaHA9ofMp'
+                    'tmSeRN7H2xtjRWKacap3DnCVKAHFUUQKNXQ'
                   ]
                 }
               },
@@ -626,10 +663,9 @@ describe('Addresses', function() {
                 'n': 1,
                 'scriptPubKey': {
                   'hex': '76a914d2ec20bb8e5f25a52f730384b803d95683250e0b88ac',
-                  'reqSigs': 1,
                   'type': 'pubkeyhash',
                   'addresses': [
-                    'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK'
+                    'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL'
                   ],
                 }
               },
@@ -638,10 +674,9 @@ describe('Addresses', function() {
                 'n': 2,
                 'scriptPubKey': {
                   'hex': '76a914583df9fa56ad961051e00ca93e68dfaf1eab9ec588ac',
-                  'reqSigs': 1,
                   'type': 'pubkeyhash',
                   'addresses': [
-                    'moZY18rGNmh4YCPeugtGW46AkkWMQttBUD'
+                    'tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb'
                   ]
                 }
               }
@@ -654,36 +689,11 @@ describe('Addresses', function() {
             'valueOut': 0.53829829,
             'size': 470,
             'valueIn': 0.53839829,
-            'fees': 0.0001,
-            'firstSeenTs': 1441108193
+            'fees': 0.0001
           }
         ]
       };
 
-      var todos = {
-        'items': [
-          {
-            'vout': [
-              {
-                'scriptPubKey': {
-                  'reqSigs': 1,
-                }
-              },
-              {
-                'scriptPubKey': {
-                  'reqSigs': 1,
-                }
-              },
-              {
-                'scriptPubKey': {
-                  'reqSigs': 1,
-                }
-              }
-            ],
-            'firstSeenTs': 1441108193
-          }
-        ]
-      };
 
       var node = {
         getAddressHistory: sinon.stub().callsArgWith(2, null, txinfos2),
@@ -695,18 +705,17 @@ describe('Addresses', function() {
         network: 'testnet'
       };
 
-      var addresses = new AddressController(node);
+      var addresses = new AddressController({node: node, txController: txControllerFor(node)});
 
       var req = {
-        addrs: 'mzkD4nmQ8ixqxySdBgsXTpgvAMK5iRZpNK,moZY18rGNmh4YCPeugtGW46AkkWMQttBUD',
+        addrs: 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL,tmHkw3FfpvjYuVyANoH2kfceWkQBYn1E3Sb',
         query: {noSpent: '1', noScriptSig: '1', noAsm: '1'},
         body: {}
       };
 
       var res = {
         jsonp: function(data) {
-          var merged = _.merge(data, todos);
-          should(merged).eql(insight);
+          should(wire(data)).eql(insight);
           done();
         }
       };
@@ -714,10 +723,50 @@ describe('Addresses', function() {
       addresses.multitxs(req, res);
     });
   });
+  describe('#checkAddrs', function() {
+    var A = 'tmEbKCSNbQYhwoR2mDKLNTqqhS2h8dPfWbK';
+    var B = 'tmUwc6uaxggpgvkDM5H21dPFG9zzH8vHoGL';
+    function run(req) {
+      var addresses = new AddressController({node: {log: {error: sinon.stub()}}});
+      var out = {next: false};
+      var res = {
+        status: function(code) { out.status = code; return res; },
+        send: function(body) { out.body = body; }
+      };
+      addresses.checkAddrs(req, res, function() { out.next = true; });
+      out.addrs = req.addrs;
+      return out;
+    }
+    it('answers 400 "Must include address" with no addresses in the form or the path', function() {
+      var out = run({body: {}, params: {}});
+      out.should.eql({next: false, status: 400, body: 'Must include address. Code:1', addrs: ['']});
+    });
+    it('answers 400 "Must include address" for an empty form value', function() {
+      var out = run({body: {addrs: ''}, params: {}});
+      out.status.should.equal(400);
+      out.body.should.equal('Must include address. Code:1');
+    });
+    it('takes the form\'s addresses before the path\'s', function() {
+      var out = run({body: {addrs: A + ',' + B}, params: {addrs: 'notanaddress'}});
+      out.next.should.equal(true);
+      out.addrs.should.eql([A, B]);
+    });
+    it('takes the path\'s addresses without a form', function() {
+      var out = run({body: {}, params: {addrs: A}});
+      out.next.should.equal(true);
+      out.addrs.should.eql([A]);
+    });
+    it('takes a form list of addresses', function() {
+      var out = run({body: {addrs: [A, B]}, params: {}});
+      out.next.should.equal(true);
+      out.addrs.should.eql([A, B]);
+    });
+  });
+
   describe('#_getTransformOptions', function() {
     it('will return false with value of string "0"', function() {
       var node = {};
-      var addresses = new AddressController(node);
+      var addresses = new AddressController({node: node});
       var req = {
         query: {
           noAsm: '0',
@@ -734,7 +783,7 @@ describe('Addresses', function() {
     });
     it('will return true with value of string "1"', function() {
       var node = {};
-      var addresses = new AddressController(node);
+      var addresses = new AddressController({node: node});
       var req = {
         query: {
           noAsm: '1',
@@ -751,7 +800,7 @@ describe('Addresses', function() {
     });
     it('will return true with value of number "1"', function() {
       var node = {};
-      var addresses = new AddressController(node);
+      var addresses = new AddressController({node: node});
       var req = {
         query: {
           noAsm: 1,

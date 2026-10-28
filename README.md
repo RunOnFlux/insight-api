@@ -19,9 +19,22 @@ This is a backend-only service. If you're looking for the web frontend applicati
 
 The API endpoints will be available by default at: `http://localhost:3001/insight-api/`
 
+## Getting Started
+
+In a bitcore Node's directory (`bitcore-node create <dir>`):
+
+```sh
+npm install @runonflux/insight-api
+```
+
+then add `@runonflux/insight-api` to `services` in `bitcore-node.json`. bitcore-node runs it as the
+service `insight-api`, and its settings go under that name in `servicesConfig`.
+
 ## Prerequisites
 
 - [bitcore Node](https://github.com/runonflux/bitcore-node)
+- Node.js 24 or later
+- MongoDB 4.4 or later, set as `db` in the service config (`host`, `port`, `database`, and `user`/`password` when the server needs them)
 
 **Note:** You can use an existing Flux data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `flux.conf`, as well as a few other additional fields.
 
@@ -57,6 +70,21 @@ Or disabled entirely with:
     }
   }
 ```
+
+## Price Requests Through a Proxy
+
+The price (`/currency`, `/markets/info` and the socket.io `markets_info` event) comes from
+Coinpaprika. On a server that reaches the internet only through an HTTP proxy, name it in
+`bitcore-node.json`:
+
+``` json
+  "servicesConfig": {
+    "insight-api": {
+      "proxy": "http://10.0.0.1:3128"
+    }
+  }
+```
+Without `proxy` the requests go direct.
 
 
 

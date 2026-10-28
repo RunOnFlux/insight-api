@@ -158,7 +158,7 @@ AddressBalanceService.prototype.updateCacheIntervals = function (next) {
                 sum: 0
             });
 
-            while (balance.greaterThanOrEqualTo(nextBorder)) {
+            while (balance.isGreaterThanOrEqualTo(nextBorder)) {
 
                 prevBorder = nextBorder;
                 nextBorder = nextBorder * 10;

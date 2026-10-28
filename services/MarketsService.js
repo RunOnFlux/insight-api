@@ -1,12 +1,12 @@
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-var request = require('request');
-var _ = require('lodash');
+var HttpHelper = require('../helpers/HttpHelper');
 var Common = require('../lib/common');
 
 function MarketsService(options) {
 
     this.common = new Common({ log: options.node.log });
+    this.proxy = options.proxy;
 
     this.info = {
         price: 0,
@@ -30,9 +30,9 @@ util.inherits(MarketsService, EventEmitter);
 
 MarketsService.prototype._updateInfo = function () {
     var self = this;
-    return request.get({
-        url: 'https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD',
-        json: true
+    return HttpHelper.get('https://api.coinpaprika.com/v1/tickers/zel-zelcash?quotes=BTC,USD', {
+        json: true,
+        proxy: self.proxy
     }, function (err, response, body) {
 
         if (err) {

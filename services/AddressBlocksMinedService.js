@@ -1,6 +1,6 @@
 var Common = require('../lib/common');
 var async = require('async');
-var bitcore = require('bitcore-lib');
+var bitcore = require('@runonflux/bitcore-lib');
 var TYPE = 'BLOCKS_MINED';
 var BN = bitcore.crypto.BN;
 var PonHelper = require('../helpers/PonHelper');
